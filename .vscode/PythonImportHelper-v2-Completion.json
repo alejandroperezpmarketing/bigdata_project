@@ -1,0 +1,56 @@
+[
+    {
+        "label": "pandas",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "pandas",
+        "description": "pandas",
+        "detail": "pandas",
+        "documentation": {}
+    },
+    {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "numpy",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "numpy",
+        "description": "numpy",
+        "detail": "numpy",
+        "documentation": {}
+    },
+    {
+        "label": "json",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "json",
+        "description": "json",
+        "detail": "json",
+        "documentation": {}
+    },
+    {
+        "label": "extractdata",
+        "kind": 2,
+        "importPath": "format_file",
+        "description": "format_file",
+        "peekOfCode": "def extractdata():\n    # 1. verificaciones\n    # 1.1 verificar si tenemos documentos en el directorio de trabajo.\n    # print(\"hello world\")\n    # https://www.geeksforgeeks.org/check-if-directory-contains-file-using-python/\n    path = \"/home/vagrant/Documents/bigdata/data\"\n    trafic_forlder_name = 'trafico'\n    meteo_forlder_name = 'estaciones_metereologicos'\n    meteo_path = f'{path}/{meteo_forlder_name}'\n    trafic_path = f'{path}/{trafic_forlder_name}'",
+        "detail": "format_file",
+        "documentation": {}
+    },
+    {
+        "label": "extractdata",
+        "kind": 2,
+        "importPath": "test",
+        "description": "test",
+        "peekOfCode": "def extractdata(source_encoding='utf-8', target_encoding='window-1252'):\n    # 1. Define paths\n    path = \"/home/vagrant/Documents/bigdata/data\"\n    trafic_folder_name = 'trafico'\n    meteo_folder_name = 'estaciones_metereologicos'\n    meteo_path = f'{path}/{meteo_folder_name}'\n    trafic_path = f'{path}/{trafic_folder_name}'\n    # 1.1 Check if the directories have files\n    if not os.listdir(meteo_path):\n        print(\"ERROR: No meteo data files in folder available\")",
+        "detail": "test",
+        "documentation": {}
+    }
+]

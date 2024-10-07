@@ -1,0 +1,29 @@
+"""
+
+    
+    
+    if estado == 0 or estado > 5000:
+        variable = "None"
+    else:
+        return
+    
+    
+
+dic = {
+    "Identificador_tramo":"",
+    "Dirección":"",
+    "Coordenada":["Latitud", "Longitud"],
+    "Valor" : [{"Fecha":"", "Lectura:""}]
+                
+    }}
+ 
+
+
+id.Tram pos 1 
+direccion  2
+estado 3
+fecha en el nombre del fichero
+geo_point
+lectura """
+
+
