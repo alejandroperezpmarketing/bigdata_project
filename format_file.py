@@ -12,7 +12,7 @@ def extractdata():
     # print("hello world")
     # https://www.geeksforgeeks.org/check-if-directory-contains-file-using-python/
 
-    path = "/home/vagrant/Documents/bigdata/data"
+    path = "/home/vagrant/Documents/bigdata/bigdata_project/data"
     trafic_forlder_name = 'trafico'
     meteo_forlder_name = 'estaciones_metereologicos'
     meteo_path = f'{path}/{meteo_forlder_name}'
@@ -46,8 +46,8 @@ def extractdata():
             try:
 
                 # print(i, y)
-                files = {i: y}
-                df_path = f'{trafic_path}/{y}'
+                #files = {i: y}
+                df_path = os.path.join(path,trafic_forlder_name)
                 print(df_path)
 
                 date_parts = [y.split(".")][0][0]
@@ -56,6 +56,8 @@ def extractdata():
                     "-")[0], y.split("-")[1], y.split("-")[-1]
 
                 # extract the data inside each document
+                
+                
                 df = pd.read_csv(df_path, delimiter=';',
                                  encoding="windows-1252")
                 #id_tramo_values = df["Id. Tram / ID. Tramo"].unique
