@@ -1,6 +1,7 @@
 import pandas as pd
 import os
 import json
+import pymongo as pmo
 
 
 def extractdata():
@@ -13,6 +14,13 @@ def extractdata():
 
     grouped_data = {}  # Dictionary to store grouped data
 
+
+    #########################
+    ######MONGODB CONEXTION#############################
+    
+    db = "db"
+    
+    #########################
     # Check if the traffic directory contains any files
     if not os.listdir(df_trafic_path):
         print("ERROR: No traffic data files in folder available")
@@ -33,52 +41,58 @@ def extractdata():
                 year, month, day_and_time = date_parts.split(
                     "-")[0], date_parts.split("-")[1], date_parts.split("-")[-1]
 
-                # Read the CSV file
-                df = pd.read_csv(trafic_file_path, delimiter=';',
-                                 encoding="windows-1252")
+                with open(trafic_file_path, 'r', encoding="windows-1252") as file:
 
-                # Split 'geo_point_2d' into latitude and longitude
-                df[['latitude', 'longitude']] = df['geo_point_2d'].str.split(
-                    ',', expand=True)
+                    while True:
+                        linea = file.readline()
+                        if not linea:
+                            break
 
-                # Group data by 'Id. Tram / ID. Tramo' and store it in the dictionary
-                for unique_id, group in df.groupby('Id. Tram / ID. Tramo'):
-                    if unique_id not in grouped_data:
-                        # Append the extracted data
-                        # Get the first latitude in the group
-                        latitude = group['latitude'].iloc[0]
-                        # Get the first longitude in the group
-                        longitude = group['longitude'].iloc[0]
+                        lect_linea = linea.split(";")
 
-                        grouped_data[unique_id] = {
-                            "id_tram": unique_id,
-                            "Direccion": group['Descripció / Descripción'].iloc[0],
-                            "Valores": [],
-                            "Coordinates": [longitude, latitude]
-                        }
+                        try:
+                            id_tramo = str(lect_linea[1])
 
-                    # Extract 'Lectura' for the given ID
+                            # Split 'geo_point_2d' into latitude and longitude
+                            latitude, longitude = str(lect_linea[-1]).split(",")
+                            lectura = float(lect_linea[2])
+                            direccion = str(lect_linea[3])
+                            estado = float(lect_linea[4])
 
-                    # Take the first 'Lectura' in the group
-                    lectura = group['Lectura'].iloc[0]
+                            # Dictionary definition
+                            if lectura == -1 or lectura > 5000 or estado != 0:
+                                lectura = None
+                                dictionary = [{"fecha": f"{year}-{month}-{day_and_time}",
+                                               "lectura": lectura}]
+                            else:
+                                # Dictionary definition
+                                dictionary = [{"fecha": f"{year}-{month}-{day_and_time}",
+                                               "lectura": lectura}]
+                                
+                                #print(dictionary)
+                            
+                                
+                            #########################
+                            ####create document on MONGODB
+                            
+                            #update a documento alrady created and if this documento does not exist create it
+                            result = db.update_one({"id_tramo":id_tramo},{"$PUSH":{"valores":{"fecha":date_parts},
+                                                                                   "lectura":lectura}})
+                            
+                            if result.raw_result["nModified"] == 0:
+                                
+                                db.insert_one({"id_tramo":id_tramo,
+                                               "direccion":direccion,
+                                               "coordenadas":[latitude,longitude],
+                                               "valores":dictionary})
+                            
+                        except Exception as e:
+                            print(f"ERROR reading {trafic_file_path}: {e}")
 
-                    # Append the new data into the 'Valores' list
-                    grouped_data[unique_id]["Valores"].append({
-                        # Concatenate date parts
-                        "Fecha": f"{year}-{month}-{day_and_time}",
-                        "Lectura": float(lectura)
-                    })
-
-                # Print grouped data in JSON format for inspection
-                print(json.dumps(grouped_data, indent=4))
-
-                # Process only one file for now (remove 'break' for all files)
-                # break
-
+                        
             except Exception as e:
                 print(f"ERROR reading {trafic_file_path}: {e}")
 
-        return grouped_data
 
 
 # Run the function
