@@ -18,15 +18,6 @@
         "documentation": {}
     },
     {
-        "label": "numpy",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "numpy",
-        "description": "numpy",
-        "detail": "numpy",
-        "documentation": {}
-    },
-    {
         "label": "json",
         "kind": 6,
         "isExtraImport": true,
@@ -36,12 +27,48 @@
         "documentation": {}
     },
     {
+        "label": "numpy",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "numpy",
+        "description": "numpy",
+        "detail": "numpy",
+        "documentation": {}
+    },
+    {
+        "label": "extractdata",
+        "kind": 2,
+        "importPath": "extract_data",
+        "description": "extract_data",
+        "peekOfCode": "def extractdata():\n    # Set the paths for your data directories\n    path = \"/home/vagrant/Documents/bigdata/bigdata_project/data\"\n    trafic_folder_name = 'trafico'\n    meteo_folder_name = 'estaciones_metereologicos'\n    df_trafic_path = os.path.join(path, trafic_folder_name)\n    df_meteo_path = os.path.join(path, meteo_folder_name)\n    grouped_data = {}  # Dictionary to store grouped data\n    # Check if the traffic directory contains any files\n    if not os.listdir(df_trafic_path):",
+        "detail": "extract_data",
+        "documentation": {}
+    },
+    {
         "label": "extractdata",
         "kind": 2,
         "importPath": "format_file",
         "description": "format_file",
-        "peekOfCode": "def extractdata():\n    # 1. verificaciones\n    # 1.1 verificar si tenemos documentos en el directorio de trabajo.\n    # print(\"hello world\")\n    # https://www.geeksforgeeks.org/check-if-directory-contains-file-using-python/\n    path = \"/home/vagrant/Documents/bigdata/data\"\n    trafic_forlder_name = 'trafico'\n    meteo_forlder_name = 'estaciones_metereologicos'\n    meteo_path = f'{path}/{meteo_forlder_name}'\n    trafic_path = f'{path}/{trafic_forlder_name}'",
+        "peekOfCode": "def extractdata():\n    # 1. verificaciones\n    # 1.1 verificar si tenemos documentos en el directorio de trabajo.\n    # print(\"hello world\")\n    # https://www.geeksforgeeks.org/check-if-directory-contains-file-using-python/\n    path = \"/home/vagrant/Documents/bigdata/bigdata_project/data\"\n    trafic_forlder_name = 'trafico'\n    meteo_forlder_name = 'estaciones_metereologicos'\n    meteo_path = f'{path}/{meteo_forlder_name}'\n    trafic_path = f'{path}/{trafic_forlder_name}'",
         "detail": "format_file",
+        "documentation": {}
+    },
+    {
+        "label": "result",
+        "kind": 5,
+        "importPath": "mongopush",
+        "description": "mongopush",
+        "peekOfCode": "result = db.update_one({\"id_tramo\"=id_tramo},{\"&push\":{\"valores\":{\"fecha\":fecha,\"lectura\":lectura}}})\nif result.raw_result[\"nModified\"] == 0:\n    db.insert_one({\"id_tramo\":id_tramo,\n                   \"direccion\":direccion,\n                   \"coordenadas\":coordenadas,\n                   \"valores\":diccionario})\ndiccionario = {\"fecha[:fecha,\"lectura\":]\n               \"\"\" \n                    if lectura == -1 or lectura > 5000 or group['Estat / Estado'] != 0:\n                        lectura = None",
+        "detail": "mongopush",
+        "documentation": {}
+    },
+    {
+        "label": "diccionario",
+        "kind": 5,
+        "importPath": "mongopush",
+        "description": "mongopush",
+        "peekOfCode": "diccionario = {\"fecha[:fecha,\"lectura\":]\n               \"\"\" \n                    if lectura == -1 or lectura > 5000 or group['Estat / Estado'] != 0:\n                        lectura = None\n                    else:\n                        lectura = lectura\n \"\"\"",
+        "detail": "mongopush",
         "documentation": {}
     },
     {
@@ -51,6 +78,24 @@
         "description": "test",
         "peekOfCode": "def extractdata(source_encoding='utf-8', target_encoding='window-1252'):\n    # 1. Define paths\n    path = \"/home/vagrant/Documents/bigdata/data\"\n    trafic_folder_name = 'trafico'\n    meteo_folder_name = 'estaciones_metereologicos'\n    meteo_path = f'{path}/{meteo_folder_name}'\n    trafic_path = f'{path}/{trafic_folder_name}'\n    # 1.1 Check if the directories have files\n    if not os.listdir(meteo_path):\n        print(\"ERROR: No meteo data files in folder available\")",
         "detail": "test",
+        "documentation": {}
+    },
+    {
+        "label": "extractdata",
+        "kind": 2,
+        "importPath": "test2",
+        "description": "test2",
+        "peekOfCode": "def extractdata():\n    # Set the paths for your data directories\n    path = \"/home/vagrant/Documents/bigdata/bigdata_project/data\"\n    trafic_folder_name = 'trafico'\n    meteo_folder_name = 'estaciones_metereologicos'\n    df_trafic_path = os.path.join(path, trafic_folder_name)\n    df_meteo_path = os.path.join(path, meteo_folder_name)\n    grouped_data = {}  # Dictionary to store grouped data\n    # Check if the traffic directory contains any files\n    if not os.listdir(df_trafic_path):",
+        "detail": "test2",
+        "documentation": {}
+    },
+    {
+        "label": "extractdata",
+        "kind": 2,
+        "importPath": "test3",
+        "description": "test3",
+        "peekOfCode": "def extractdata():\n    # Set the paths for your data directories\n    path = \"/home/vagrant/Documents/bigdata/bigdata_project/data\"\n    trafic_folder_name = 'trafico'\n    meteo_folder_name = 'estaciones_metereologicos'\n    df_trafic_path = os.path.join(path, trafic_folder_name)\n    df_meteo_path = os.path.join(path, meteo_folder_name)\n    grouped_data = {}  # Dictionary to store grouped data\n    # Check if the traffic directory contains any files\n    if not os.listdir(df_trafic_path):",
+        "detail": "test3",
         "documentation": {}
     }
 ]
