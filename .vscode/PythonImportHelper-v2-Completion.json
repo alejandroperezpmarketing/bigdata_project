@@ -1,5 +1,30 @@
 [
     {
+        "label": "pymongo",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "pymongo",
+        "description": "pymongo",
+        "detail": "pymongo",
+        "documentation": {}
+    },
+    {
+        "label": "MongoClient",
+        "importPath": "pymongo",
+        "description": "pymongo",
+        "isExtraImport": true,
+        "detail": "pymongo",
+        "documentation": {}
+    },
+    {
+        "label": "MongoClient",
+        "importPath": "pymongo",
+        "description": "pymongo",
+        "isExtraImport": true,
+        "detail": "pymongo",
+        "documentation": {}
+    },
+    {
         "label": "pandas",
         "kind": 6,
         "isExtraImport": true,
@@ -36,11 +61,83 @@
         "documentation": {}
     },
     {
+        "label": "client",
+        "kind": 5,
+        "importPath": "connection_test",
+        "description": "connection_test",
+        "peekOfCode": "client = mc('mongodb://vagrant:vagrant@localhost:27017/admin')\n#client = mc('mongodb://vagrant:vagrant@localhost:27017/bigdata')\ndb = client.Test\ncoleccion = db.list_collections_names()\nprint(coleccion)\ndoc = coleccion.find()\nfor document in doc:\n    print(document)\n#update a documento alrady created and if this documento does not exist create it\n                             result = db.trafico.update_one({\"id_tramo\":id_tramo},{\"$push\":{\"valores\":{\"fecha\":date_parts},",
+        "detail": "connection_test",
+        "documentation": {}
+    },
+    {
+        "label": "#client",
+        "kind": 5,
+        "importPath": "connection_test",
+        "description": "connection_test",
+        "peekOfCode": "#client = mc('mongodb://vagrant:vagrant@localhost:27017/bigdata')\ndb = client.Test\ncoleccion = db.list_collections_names()\nprint(coleccion)\ndoc = coleccion.find()\nfor document in doc:\n    print(document)\n#update a documento alrady created and if this documento does not exist create it\n                             result = db.trafico.update_one({\"id_tramo\":id_tramo},{\"$push\":{\"valores\":{\"fecha\":date_parts},\n                                                                                   \"lectura\":lectura}})",
+        "detail": "connection_test",
+        "documentation": {}
+    },
+    {
+        "label": "db",
+        "kind": 5,
+        "importPath": "connection_test",
+        "description": "connection_test",
+        "peekOfCode": "db = client.Test\ncoleccion = db.list_collections_names()\nprint(coleccion)\ndoc = coleccion.find()\nfor document in doc:\n    print(document)\n#update a documento alrady created and if this documento does not exist create it\n                             result = db.trafico.update_one({\"id_tramo\":id_tramo},{\"$push\":{\"valores\":{\"fecha\":date_parts},\n                                                                                   \"lectura\":lectura}})\n                            if result.raw_result[\"nModified\"] == 0:",
+        "detail": "connection_test",
+        "documentation": {}
+    },
+    {
+        "label": "coleccion",
+        "kind": 5,
+        "importPath": "connection_test",
+        "description": "connection_test",
+        "peekOfCode": "coleccion = db.list_collections_names()\nprint(coleccion)\ndoc = coleccion.find()\nfor document in doc:\n    print(document)\n#update a documento alrady created and if this documento does not exist create it\n                             result = db.trafico.update_one({\"id_tramo\":id_tramo},{\"$push\":{\"valores\":{\"fecha\":date_parts},\n                                                                                   \"lectura\":lectura}})\n                            if result.raw_result[\"nModified\"] == 0:\n                                db.trafico.insert_one({\"id_tramo\":id_tramo,",
+        "detail": "connection_test",
+        "documentation": {}
+    },
+    {
+        "label": "doc",
+        "kind": 5,
+        "importPath": "connection_test",
+        "description": "connection_test",
+        "peekOfCode": "doc = coleccion.find()\nfor document in doc:\n    print(document)\n#update a documento alrady created and if this documento does not exist create it\n                             result = db.trafico.update_one({\"id_tramo\":id_tramo},{\"$push\":{\"valores\":{\"fecha\":date_parts},\n                                                                                   \"lectura\":lectura}})\n                            if result.raw_result[\"nModified\"] == 0:\n                                db.trafico.insert_one({\"id_tramo\":id_tramo,\n                                                       \"direccion\":direccion,\n                                                        \"coordenadas\":[latitude,longitude],",
+        "detail": "connection_test",
+        "documentation": {}
+    },
+    {
         "label": "extractdata",
         "kind": 2,
         "importPath": "extract_data",
         "description": "extract_data",
-        "peekOfCode": "def extractdata():\n    # Set the paths for your data directories\n    path = \"/home/vagrant/Documents/bigdata/bigdata_project/data\"\n    trafic_folder_name = 'trafico'\n    meteo_folder_name = 'estaciones_metereologicos'\n    df_trafic_path = os.path.join(path, trafic_folder_name)\n    df_meteo_path = os.path.join(path, meteo_folder_name)\n    grouped_data = {}  # Dictionary to store grouped data\n    # Check if the traffic directory contains any files\n    if not os.listdir(df_trafic_path):",
+        "peekOfCode": "def extractdata():\n    # Set the paths for your data directories\n    path = \"/home/vagrant/Documents/bigdata/data\"\n    trafic_folder_name = 'trafico'\n    meteo_folder_name = 'estaciones_metereologicos'\n    df_trafic_path = os.path.join(path, trafic_folder_name)\n    df_meteo_path = os.path.join(path, meteo_folder_name)\n    grouped_data = {}  # Dictionary to store grouped data\n    #########################\n    # Check if the traffic directory contains any files",
+        "detail": "extract_data",
+        "documentation": {}
+    },
+    {
+        "label": "#client",
+        "kind": 5,
+        "importPath": "extract_data",
+        "description": "extract_data",
+        "peekOfCode": "#client = mc('mongodb://vagrant:vagrant@localhost:27017/bigdata')\nclient = mc('mongodb://vagrant:vagrant@localhost:27017/bigdata?authSource=admin')\ndb = client.bigdata\ndef extractdata():\n    # Set the paths for your data directories\n    path = \"/home/vagrant/Documents/bigdata/data\"\n    trafic_folder_name = 'trafico'\n    meteo_folder_name = 'estaciones_metereologicos'\n    df_trafic_path = os.path.join(path, trafic_folder_name)\n    df_meteo_path = os.path.join(path, meteo_folder_name)",
+        "detail": "extract_data",
+        "documentation": {}
+    },
+    {
+        "label": "client",
+        "kind": 5,
+        "importPath": "extract_data",
+        "description": "extract_data",
+        "peekOfCode": "client = mc('mongodb://vagrant:vagrant@localhost:27017/bigdata?authSource=admin')\ndb = client.bigdata\ndef extractdata():\n    # Set the paths for your data directories\n    path = \"/home/vagrant/Documents/bigdata/data\"\n    trafic_folder_name = 'trafico'\n    meteo_folder_name = 'estaciones_metereologicos'\n    df_trafic_path = os.path.join(path, trafic_folder_name)\n    df_meteo_path = os.path.join(path, meteo_folder_name)\n    grouped_data = {}  # Dictionary to store grouped data",
+        "detail": "extract_data",
+        "documentation": {}
+    },
+    {
+        "label": "db",
+        "kind": 5,
+        "importPath": "extract_data",
+        "description": "extract_data",
+        "peekOfCode": "db = client.bigdata\ndef extractdata():\n    # Set the paths for your data directories\n    path = \"/home/vagrant/Documents/bigdata/data\"\n    trafic_folder_name = 'trafico'\n    meteo_folder_name = 'estaciones_metereologicos'\n    df_trafic_path = os.path.join(path, trafic_folder_name)\n    df_meteo_path = os.path.join(path, meteo_folder_name)\n    grouped_data = {}  # Dictionary to store grouped data\n    #########################",
         "detail": "extract_data",
         "documentation": {}
     },
@@ -76,7 +173,7 @@
         "kind": 2,
         "importPath": "test",
         "description": "test",
-        "peekOfCode": "def extractdata(source_encoding='utf-8', target_encoding='window-1252'):\n    # 1. Define paths\n    path = \"/home/vagrant/Documents/bigdata/data\"\n    trafic_folder_name = 'trafico'\n    meteo_folder_name = 'estaciones_metereologicos'\n    meteo_path = f'{path}/{meteo_folder_name}'\n    trafic_path = f'{path}/{trafic_folder_name}'\n    # 1.1 Check if the directories have files\n    if not os.listdir(meteo_path):\n        print(\"ERROR: No meteo data files in folder available\")",
+        "peekOfCode": "def extractdata():\n    # Set the paths for your data directories\n    path = \"/home/vagrant/Documents/bigdata/bigdata_project/data\"\n    trafic_folder_name = 'trafico'\n    meteo_folder_name = 'estaciones_metereologicos'\n    df_trafic_path = os.path.join(path, trafic_folder_name)\n    df_meteo_path = os.path.join(path, meteo_folder_name)\n    grouped_data = {}  # Dictionary to store grouped data\n    # Check if the traffic directory contains any files\n    if not os.listdir(df_trafic_path):",
         "detail": "test",
         "documentation": {}
     },

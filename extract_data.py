@@ -3,6 +3,8 @@
 # import and update documents on a collections
 # Project URL: https://github.com/alejandroperezpmarketing/bigdata_project
 # MongoDB Docker container URL: https://github.com/alejandroperezpmarketing/mogodb
+# The update_one() method followed by insert_one() is fine for relatively small datasets, 
+# bulk_write() or another batch operation with bid databases to optimize MongoDB interactions.
 
 import pandas as pd
 import os
@@ -24,7 +26,7 @@ db = client.bigdata
 
 def extractdata():
     # Set the paths for your data directories
-    path = "/home/vagrant/Documents/bigdata/bigdata_project/data"
+    path = "/home/vagrant/Documents/bigdata/data"
     trafic_folder_name = 'trafico'
     meteo_folder_name = 'estaciones_metereologicos'
     df_trafic_path = os.path.join(path, trafic_folder_name)
@@ -64,11 +66,31 @@ def extractdata():
 
                         try:
                             id_tramo = str(lect_linea[1])
-
-                            # Split 'geo_point_2d' into latitude and longitude
-                            latitude, longitude = str(lect_linea[-1]).split(",")
-                            lectura = float(lect_linea[2])
-                            direccion = str(lect_linea[3])
+                            
+                            geo_point = lect_linea[-1]
+                            
+                            if "," in geo_point:
+                                # Split 'geo_point_2d' into latitude and longitude
+                                latitude, longitude = str(geo_point).replace(" ","").strip().split(",")
+                                latitude, longitude = latitude.strip(), longitude.strip()
+                                # print(float(latitude))
+                                # print(float(longitude))
+                            else:
+                                latitude, longitude = None, None
+                                print(f"Invalid geo_point_2d value in {trafic_file_path}: {geo_point}")                                
+                            
+                            lectura_value = lect_linea[2].strip()
+                            if lectura_value.replace('.','',1).isnumeric():
+                                
+                                # print(latitude, longitude)
+                                lectura = float(lectura_value)
+                                # print(lectura)
+                            
+                            else:
+                                # Skip rows where the 'lectura' value is invalid (e.g., header or non-numeric)
+                                print(f"Invalid lectura value in {trafic_file_path}: {lectura_value}")
+                                continue  # Skip this row and move to the next iteration
+                            direccion = str(lect_linea[3]).lower()
                             estado = float(lect_linea[4])
 
                             # Dictionary definition
@@ -86,35 +108,25 @@ def extractdata():
                             #########################
                             # create document on MONGODB
                             
-                            #update a documento alrady created and if this documento does not exist create it
-                            result = db.trafico.update_one({"id_tramo":id_tramo},{"$push":{"valores":{"fecha":date_parts},
-                                                                                   "lectura":lectura}})
-                            
-                            if result.raw_result["nModified"] == 0:
-                                
+                            result = db.trafico.update_one({"id_tramo":id_tramo},{"$push":{"valores":{"fecha":date_parts, "lectura":lectura}}})
+                           
+                            if result.raw_result["nModified"] == 0 and result.modified_count == 0 and result.upserted_id == None:
                                 db.trafico.insert_one({"id_tramo":id_tramo,
-                                               "direccion":direccion,
-                                               "coordenadas":[latitude,longitude],
-                                               "valores":dictionary})
+                                                       "direccion":direccion,
+                                                        "coordenadas":[latitude,longitude],
+                                                        "valores":dictionary})
+                            
                              
-                            """ result = db.trafico.update_one(
-                                {"id_tramo": id_tramo},
-                                {
-                                    "$push": {
-                                        "valores": {
-                                            "fecha": f"{year}-{month}-{day_and_time}",
-                                            "lectura": lectura
-                                        }
-                                    }
-                                },
-                                upsert=True  # This will insert the document if it doesn't exist
-                            )
- """
-                            if result.modified_count == 0 and result.upserted_id is not None:
-                                print(f"Inserted new document for id_tramo: {id_tramo}")
+                                print(f"A new document has been created with id_tramo: {id_tramo}")
+                            
+                            else:
+                                print(f"New entry for the document with id_tramo: {id_tramo}")
+
+                            
+                                                 
+                            
                         except Exception as e:
                             print(f"ERROR reading {trafic_file_path}: {e}")
-
                         
             except Exception as e:
                 print(f"ERROR reading {trafic_file_path}: {e}")
