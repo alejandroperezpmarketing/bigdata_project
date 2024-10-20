@@ -5,6 +5,7 @@
 # MongoDB Docker container URL: https://github.com/alejandroperezpmarketing/mogodb
 # The update_one() method followed by insert_one() is fine for relatively small datasets, 
 # bulk_write() or another batch operation with bid databases to optimize MongoDB interactions.
+#https://stackoverflow.com/questions/4796764/read-file-from-line-2-or-skip-header-row
 
 import pandas as pd
 import os

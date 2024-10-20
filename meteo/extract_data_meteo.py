@@ -54,6 +54,34 @@ def extractdata_meteo():
         
         if count_meteo == 12:
             print("ok: 12 meteo stations in this directory")
+             # Loop through each file in the traffic directory
+            for i, y in enumerate(os.listdir(df_meteo_path)):
+                try:
+                    meteo_file_path = os.path.join(df_meteo_path, y)
+                    print(f"Processing file: {meteo_file_path}")
+                    
+                    with open(meteo_file_path, 'r', encoding="iso-8859-1") as file:
+                        for i, values in enumerate(file):
+                            if i==1 and i<6:
+                                print(values)
+                                
+                                estacion = str(values.split('-')[-1])
+                               
+                                estacion = estacion.replace(' ','')
+                                #print(estacion)
+                           
+                                """ for i in coordinates.keys():
+                                    if estacion in coordinates.keys():
+                                    
+                                        print(coordinates.values[i])
+                                
+                                if estacion in coordinates.keys():
+                                    print(estacion) """
+                                        
+                                #print(coordinates.keys())
+                except Exception as e:
+                    print(f'ERROR reading {meteo_file_path}: {e}')
+
         else:
             print("ERROR: not enouth files to start working")
             
