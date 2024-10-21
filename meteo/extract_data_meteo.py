@@ -82,12 +82,15 @@ def extractdata_meteo():
                                 #identifing the station coordiantes in the coordinates dictionary
                                 station_coordinates = coordinates.get(estacion)
                             
-                                # estacion = estacion.replace('.','')
                                 
                                 print(estacion)
                                 print(station_coordinates)
-                           
-                                #print(coordinates.keys())
+
+                            elif i>6:
+                                print("ok")
+                                for i, line in enumerate(result):
+                                    line = line.split('\t')
+                                    print(line)
                 except Exception as e:
                     print(f'ERROR reading {meteo_file_path}: {e}')
 
