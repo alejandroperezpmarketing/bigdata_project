@@ -14,18 +14,18 @@ from pymongo import MongoClient as mc
 
 
 coordinates = {
-"Avda. Francia": [39.457504, -0.342689],
+"Av França": [39.457504, -0.342689],
 "Bulevard Sud": [39.450378, -0.396313],
 "Molí del Sol": [39.481138, -0.408558],
 "Pista de Silla": [39.458060, -0.376653],
 "Politècnic": [39.479621, -0.337407],
 "Centre": [39.470718, -0.376384],
 "Vivers": [39.479488, -0.369550],
-"Port Moll Trans. Ponent": [39.459264, -0.323217],
-"Nazaret Met-2": [39.448554, -0.333289],
+"València Port Moll Trans Ponent": [39.459264, -0.323217],
+"Nazaret Met": [39.448554, -0.333289],
 "Conselleria Meteo": [39.472034, -0.404878],
-"Olivereta": [39.469238, -0.406037],
-"Port Turia": [39.450518, -0.328945]}
+"València Olivereta": [39.469238, -0.406037],
+"València Port llit antic Túria": [39.450518, -0.328945]}
 
 
 client = mc('mongodb://vagrant:vagrant@localhost:27017/bigdata?authSource=admin')
@@ -36,9 +36,9 @@ db = client.bigdata
 
 
 def extractdata_meteo():
-    path="/home/vagrant/Documents/bigdata_project/meteo"
+    path="/home/vagrant/Documents/bigdata/bigdata_project/meteo"
     #path = "/home/vagrant/Documents/bigdata/data"
-    meteo_folder_name = 'estaciones_metereologicos'
+    meteo_folder_name = 'estaciones_metereologicas'
     df_meteo_path = os.path.join(path, meteo_folder_name)
     
     
@@ -61,23 +61,32 @@ def extractdata_meteo():
                     print(f"Processing file: {meteo_file_path}")
                     
                     with open(meteo_file_path, 'r', encoding="iso-8859-1") as file:
-                        for i, values in enumerate(file):
-                            if i==1 and i<6:
-                                print(values)
+                        result = file.readlines()
+                        for i, value in enumerate(result):
+                            if i==1:
+                                #print(values)
                                 
-                                estacion = str(values.split('-')[-1])
-                               
-                                estacion = estacion.replace(' ','')
-                                #print(estacion)
-                           
-                                """ for i in coordinates.keys():
-                                    if estacion in coordinates.keys():
+                                #extracting the meteo station name to asign it their coordinates
+                                parts = value.strip().split("-")
+                                if len(parts)>2:
+                                    estacion = parts[2].strip()
+                                    estacion = estacion.replace('.','')
+                                else:
+                                    estacion = parts[1].strip()
+                                    estacion = estacion.replace('.','')
                                     
-                                        print(coordinates.values[i])
+
+                                if estacion.startswith(' '):
+                                    estacion = estacion[1:]
+                                    estacion = estacion.replace('.','')
+                                #identifing the station coordiantes in the coordinates dictionary
+                                station_coordinates = coordinates.get(estacion)
+                            
+                                # estacion = estacion.replace('.','')
                                 
-                                if estacion in coordinates.keys():
-                                    print(estacion) """
-                                        
+                                print(estacion)
+                                print(station_coordinates)
+                           
                                 #print(coordinates.keys())
                 except Exception as e:
                     print(f'ERROR reading {meteo_file_path}: {e}')
