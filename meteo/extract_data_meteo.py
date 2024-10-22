@@ -9,6 +9,7 @@
 import pandas as pd
 import os
 import json
+import re
 import pymongo as pmo
 from pymongo import MongoClient as mc
 
@@ -27,6 +28,11 @@ coordinates = {
 "València Olivereta": [39.469238, -0.406037],
 "València Port llit antic Túria": [39.450518, -0.328945]}
 
+patterns = [
+        r"^\d{4}-\d{2}-\d{2}",    # YYYY-MM-DD
+        r"^\d{2}/\d{2}/\d{4}",    # DD/MM/YYYY or MM/DD/YYYY
+        r"^[A-Za-z]+\s\d{1,2},\s\d{4}"  # Month Day, Year
+    ]
 
 client = mc('mongodb://vagrant:vagrant@localhost:27017/bigdata?authSource=admin')
 
@@ -58,12 +64,20 @@ def extractdata_meteo():
             for i, y in enumerate(os.listdir(df_meteo_path)):
                 try:
                     meteo_file_path = os.path.join(df_meteo_path, y)
-                    print(f"Processing file: {meteo_file_path}")
                     
+                    print(f"Opening file: {meteo_file_path}")
                     with open(meteo_file_path, 'r', encoding="iso-8859-1") as file:
                         result = file.readlines()
-                        for i, value in enumerate(result):
-                            if i==1:
+                        
+                        
+                        #print(lect_line)
+                                
+                        print(f"Working with the document: {meteo_file_path}")
+                        for id, value in enumerate(result):
+                            
+                            lect_line = value.replace('\n','').strip().split("\t")
+                            
+                            if "Estaci" in value:
                                 #print(values)
                                 
                                 #extracting the meteo station name to asign it their coordinates
@@ -81,16 +95,48 @@ def extractdata_meteo():
                                     estacion = estacion.replace('.','')
                                 #identifing the station coordiantes in the coordinates dictionary
                                 station_coordinates = coordinates.get(estacion)
+                                print(f'Coordinates for the station {estacion} are: {station_coordinates}')
+                               
                             
-                                
-                                print(estacion)
-                                print(station_coordinates)
+                            elif "FECHA" in value:
+                                #print(result[i])
+                                if "NO2" in value:
+                                    lect_line = result[id].split("\t")
+                                    #print(lect_line)
+                                    pos_NO2 = lect_line.index("NO2")
+                                    #print(lect_line[pos_NO2])
+                                    print(f'position of NO2 column in the document:{meteo_file_path} is: {pos_NO2}')
+                                    pos_date, pos_hour = lect_line.index("FECHA"), lect_line.index("HORA")
+                                            
+                                    # print(lect_line)
+                               
+                                            
 
-                            elif i>6:
-                                print("ok")
-                                for i, line in enumerate(result):
-                                    line = line.split('\t')
-                                    print(line)
+                                            
+                                else:
+                                    print(f"ERROR: No NO2 value in: {meteo_file_path}")
+                                    print("Closing the program and deleting pre procesed document...")
+                                    continue
+                                ############
+                                # NO2 = lect_line[pos_NO2]
+                                # print(NO2)
+                             # Iterate over patterns and check if any pattern matches the start of the line
+                            
+                            for pattern in patterns:
+                                if re.match(pattern, lect_line[0]):
+                                # print(True)
+                                    NO2 = lect_line[pos_NO2]
+                                    date = lect_line[pos_date]
+                                    hour = lect_line[pos_hour]
+                                    print(NO2, lect_line, station_coordinates, date,hour)
+                                # else:
+                                #     date = lect_line[id].next
+                                #     print(date)
+
+
+                          
+                                
+                                
                 except Exception as e:
                     print(f'ERROR reading {meteo_file_path}: {e}')
 

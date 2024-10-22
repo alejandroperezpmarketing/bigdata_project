@@ -1,30 +1,5 @@
 [
     {
-        "label": "pymongo",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "pymongo",
-        "description": "pymongo",
-        "detail": "pymongo",
-        "documentation": {}
-    },
-    {
-        "label": "MongoClient",
-        "importPath": "pymongo",
-        "description": "pymongo",
-        "isExtraImport": true,
-        "detail": "pymongo",
-        "documentation": {}
-    },
-    {
-        "label": "MongoClient",
-        "importPath": "pymongo",
-        "description": "pymongo",
-        "isExtraImport": true,
-        "detail": "pymongo",
-        "documentation": {}
-    },
-    {
         "label": "pandas",
         "kind": 6,
         "isExtraImport": true,
@@ -52,12 +27,99 @@
         "documentation": {}
     },
     {
+        "label": "re",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "re",
+        "description": "re",
+        "detail": "re",
+        "documentation": {}
+    },
+    {
+        "label": "pymongo",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "pymongo",
+        "description": "pymongo",
+        "detail": "pymongo",
+        "documentation": {}
+    },
+    {
+        "label": "MongoClient",
+        "importPath": "pymongo",
+        "description": "pymongo",
+        "isExtraImport": true,
+        "detail": "pymongo",
+        "documentation": {}
+    },
+    {
+        "label": "MongoClient",
+        "importPath": "pymongo",
+        "description": "pymongo",
+        "isExtraImport": true,
+        "detail": "pymongo",
+        "documentation": {}
+    },
+    {
+        "label": "MongoClient",
+        "importPath": "pymongo",
+        "description": "pymongo",
+        "isExtraImport": true,
+        "detail": "pymongo",
+        "documentation": {}
+    },
+    {
         "label": "numpy",
         "kind": 6,
         "isExtraImport": true,
         "importPath": "numpy",
         "description": "numpy",
         "detail": "numpy",
+        "documentation": {}
+    },
+    {
+        "label": "extractdata_meteo",
+        "kind": 2,
+        "importPath": "meteo.extract_data_meteo",
+        "description": "meteo.extract_data_meteo",
+        "peekOfCode": "def extractdata_meteo():\n    path=\"/home/vagrant/Documents/bigdata/bigdata_project/meteo\"\n    #path = \"/home/vagrant/Documents/bigdata/data\"\n    meteo_folder_name = 'estaciones_metereologicas'\n    df_meteo_path = os.path.join(path, meteo_folder_name)\n    #########################\n    # Check if the traffic directory contains any files\n    if not os.listdir(df_meteo_path):\n        print(\"ERROR: No traffic data files in folder available\")\n        return  # Exit the function if no files are found",
+        "detail": "meteo.extract_data_meteo",
+        "documentation": {}
+    },
+    {
+        "label": "coordinates",
+        "kind": 5,
+        "importPath": "meteo.extract_data_meteo",
+        "description": "meteo.extract_data_meteo",
+        "peekOfCode": "coordinates = {\n\"Av França\": [39.457504, -0.342689],\n\"Bulevard Sud\": [39.450378, -0.396313],\n\"Molí del Sol\": [39.481138, -0.408558],\n\"Pista de Silla\": [39.458060, -0.376653],\n\"Politècnic\": [39.479621, -0.337407],\n\"Centre\": [39.470718, -0.376384],\n\"Vivers\": [39.479488, -0.369550],\n\"València Port Moll Trans Ponent\": [39.459264, -0.323217],\n\"Nazaret Met\": [39.448554, -0.333289],",
+        "detail": "meteo.extract_data_meteo",
+        "documentation": {}
+    },
+    {
+        "label": "patterns",
+        "kind": 5,
+        "importPath": "meteo.extract_data_meteo",
+        "description": "meteo.extract_data_meteo",
+        "peekOfCode": "patterns = [\n        r\"^\\d{4}-\\d{2}-\\d{2}\",    # YYYY-MM-DD\n        r\"^\\d{2}/\\d{2}/\\d{4}\",    # DD/MM/YYYY or MM/DD/YYYY\n        r\"^[A-Za-z]+\\s\\d{1,2},\\s\\d{4}\"  # Month Day, Year\n    ]\nclient = mc('mongodb://vagrant:vagrant@localhost:27017/bigdata?authSource=admin')\ndb = client.bigdata\ndef extractdata_meteo():\n    path=\"/home/vagrant/Documents/bigdata/bigdata_project/meteo\"\n    #path = \"/home/vagrant/Documents/bigdata/data\"",
+        "detail": "meteo.extract_data_meteo",
+        "documentation": {}
+    },
+    {
+        "label": "client",
+        "kind": 5,
+        "importPath": "meteo.extract_data_meteo",
+        "description": "meteo.extract_data_meteo",
+        "peekOfCode": "client = mc('mongodb://vagrant:vagrant@localhost:27017/bigdata?authSource=admin')\ndb = client.bigdata\ndef extractdata_meteo():\n    path=\"/home/vagrant/Documents/bigdata/bigdata_project/meteo\"\n    #path = \"/home/vagrant/Documents/bigdata/data\"\n    meteo_folder_name = 'estaciones_metereologicas'\n    df_meteo_path = os.path.join(path, meteo_folder_name)\n    #########################\n    # Check if the traffic directory contains any files\n    if not os.listdir(df_meteo_path):",
+        "detail": "meteo.extract_data_meteo",
+        "documentation": {}
+    },
+    {
+        "label": "db",
+        "kind": 5,
+        "importPath": "meteo.extract_data_meteo",
+        "description": "meteo.extract_data_meteo",
+        "peekOfCode": "db = client.bigdata\ndef extractdata_meteo():\n    path=\"/home/vagrant/Documents/bigdata/bigdata_project/meteo\"\n    #path = \"/home/vagrant/Documents/bigdata/data\"\n    meteo_folder_name = 'estaciones_metereologicas'\n    df_meteo_path = os.path.join(path, meteo_folder_name)\n    #########################\n    # Check if the traffic directory contains any files\n    if not os.listdir(df_meteo_path):\n        print(\"ERROR: No traffic data files in folder available\")",
+        "detail": "meteo.extract_data_meteo",
         "documentation": {}
     },
     {
