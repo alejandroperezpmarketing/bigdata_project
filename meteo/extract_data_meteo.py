@@ -12,7 +12,10 @@ import json
 import re
 import pymongo as pmo
 from pymongo import MongoClient as mc
+#import logging
 
+logs_path = "/home/vagrant/Documents/bigdata/bigdata_project/meteo"
+#logging.basicConfig(file=f'{logs_path}/meteo_data.log',level=logging.INFO)
 
 coordinates = {
 "Av França": [39.457504, -0.342689],
@@ -38,15 +41,13 @@ client = mc('mongodb://vagrant:vagrant@localhost:27017/bigdata?authSource=admin'
 
 db = client.bigdata
 
-
-
-
 def extractdata_meteo():
     path="/home/vagrant/Documents/bigdata/bigdata_project/meteo"
     #path = "/home/vagrant/Documents/bigdata/data"
     meteo_folder_name = 'estaciones_metereologicas'
     df_meteo_path = os.path.join(path, meteo_folder_name)
-    
+    id_estacion = 1
+
     
     #########################
     # Check if the traffic directory contains any files
@@ -63,17 +64,19 @@ def extractdata_meteo():
              # Loop through each file in the traffic directory
             for i, y in enumerate(os.listdir(df_meteo_path)):
                 try:
+                    
                     meteo_file_path = os.path.join(df_meteo_path, y)
+                    #logging.info(f'Prcesing file: {meteo_file_path}')
                     
                     print(f"Opening file: {meteo_file_path}")
                     with open(meteo_file_path, 'r', encoding="iso-8859-1") as file:
-                        result = file.readlines()
+                        lecture = file.readlines()
                         
                         
                         #print(lect_line)
                                 
                         print(f"Working with the document: {meteo_file_path}")
-                        for id, value in enumerate(result):
+                        for id, value in enumerate(lecture):
                             
                             lect_line = value.replace('\n','').strip().split("\t")
                             
@@ -95,13 +98,15 @@ def extractdata_meteo():
                                     estacion = estacion.replace('.','')
                                 #identifing the station coordiantes in the coordinates dictionary
                                 station_coordinates = coordinates.get(estacion)
+                                latitude = float(station_coordinates[0])
+                                longitude = float(station_coordinates[1])
                                 print(f'Coordinates for the station {estacion} are: {station_coordinates}')
                                
                             
                             elif "FECHA" in value:
                                 #print(result[i])
                                 if "NO2" in value:
-                                    lect_line = result[id].split("\t")
+                                    lect_line = lecture[id].split("\t")
                                     #print(lect_line)
                                     pos_NO2 = lect_line.index("NO2")
                                     #print(lect_line[pos_NO2])
@@ -110,9 +115,7 @@ def extractdata_meteo():
                                             
                                     # print(lect_line)
                                
-                                            
-
-                                            
+                                        
                                 else:
                                     print(f"ERROR: No NO2 value in: {meteo_file_path}")
                                     print("Closing the program and deleting pre procesed document...")
@@ -122,26 +125,52 @@ def extractdata_meteo():
                                 # print(NO2)
                              # Iterate over patterns and check if any pattern matches the start of the line
                             
+                            date, hour, NO2 = None, None, None
+                            
                             for pattern in patterns:
                                 if re.match(pattern, lect_line[0]):
+                                    try:
                                 # print(True)
-                                    NO2 = lect_line[pos_NO2]
-                                    date = lect_line[pos_date]
-                                    hour = lect_line[pos_hour]
-                                    print(NO2, lect_line, station_coordinates, date,hour)
-                                # else:
+                                        NO2 = lect_line[pos_NO2]
+                                        date = lect_line[pos_date]
+                                        hour = lect_line[pos_hour]
+                                        print(NO2, lect_line, station_coordinates, date,hour)
+                                    except Exception as e:
+                                        print(f"ERROR parsing NO2, Date, or Hour from {meteo_file_path} at line {id}: {e}")
+                                        break
+                                else:
+                                    print(f"ERROR: no date format in line: {id}")
+                                    continue
                                 #     date = lect_line[id].next
                                 #     print(date)
 
 
-                          
+                            ### START LINES FOR MONGODB
+                            dictionary = [{'fecha':date,'hora':hour,'lectura_NO2':NO2}]
+                            mongo_result = db.meteo.update_one({"estacion_id":id_estacion},{"$push":{"valores":{"fecha":date,"hora":hour, "lectura_NO2":NO2}}})
+                           
+                            if mongo_result.raw_result["nModified"] == 0 and mongo_result.modified_count == 0 and mongo_result.upserted_id == None:
+                                db.meteo.insert_one({"id_estacion":id_estacion,
+                                                       "Nombre":estacion,
+                                                        "coordenadas":[latitude,longitude],
+                                                        "valores":dictionary})
+                                id_estacion +=1
+                            
+                             
+                                print(f"A new document has been created with id_estacion station: {id_estacion}/{estacion}")
+                            
+                            else:
+                                print(f"New entry for the document for a meteo station with id_estacion and name: {id_estacion}/{estacion}")
+
                                 
                                 
                 except Exception as e:
                     print(f'ERROR reading {meteo_file_path}: {e}')
+                    #logging.error(f'ERROR reading {meteo_file_path}: {e}')
 
         else:
             print("ERROR: not enouth files to start working")
+            #logging.error("ERROR: not enouth files to start working")
             
             
 extractdata_meteo()
