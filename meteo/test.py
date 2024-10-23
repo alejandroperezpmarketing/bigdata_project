@@ -32,15 +32,6 @@ coordinates = {
 "València Olivereta": [39.469238, -0.406037],
 "València Port llit antic Túria": [39.450518, -0.328945]}
 
-#########################
-###### MONGODB CONEXTION#############################
-# 1. Client
-#client = mc('mongodb://vagrant:vagrant@localhost:27017/bigdata')
-client = mc('mongodb://vagrant:vagrant@localhost:27017/bigdata?authSource=admin')
-
-db = client.bigdata
-
-
 def contains_date(line):
     # Loop through each pattern to see if the line contains a date
     for pattern in patterns:
@@ -68,13 +59,12 @@ def extractdata_meteo():
                 try:
                     meteo_file_path = os.path.join(df_meteo_path, y)
                     print(f"Opening file: {meteo_file_path}")
-                    id_estacion = 1
+                    
                     with open(meteo_file_path, 'r', encoding="iso-8859-1") as file:
                         lecture = file.readlines()
                         pos_NO2 = None
                         pos_date = None
                         pos_hour = None
-                        
                         
                         # Process each line in the file
                         for id, line in enumerate(lecture):
@@ -104,9 +94,6 @@ def extractdata_meteo():
                                              
                                 # #identifing the station coordiantes in the coordinates dictionary
                                 station_coordinates = coordinates.get(estacion)
-                                latitude = float(station_coordinates[0])
-                                longitude = float(station_coordinates[1])
-
                                 #print(station_coordinates)
                             
                             
@@ -142,20 +129,8 @@ def extractdata_meteo():
                                             print(f"ERROR parsing Hour from {meteo_file_path} at line {id}")
                                             break
                                         
-                                        #print(f'station {estacion} {station_coordinates} working on line {id} from file {meteo_file_path}')
-                                        #print(f'fecha: {date_value},hora: {hour}, NO2: {NO2_value}')
-                                        # Dictionary definition
-                                        dictionary = [{"fecha": date_value, "hora": hour, "NO2": NO2_value}]
-                                        
-                                        
-                                        result = db.meteo.update_one({"id_estacion":id_estacion},{"$push":{"valores":{"fecha":date_value,"hora":hour, "NO2":NO2_value}}})
-                                        if result.raw_result["nModified"] == 0 and result.modified_count == 0 and result.upserted_id == None:
-                                            db.trafico.insert_one({"id_estacion":id_estacion,
-                                                                   "nombre":estacion,
-                                                                    "coordenadas":[latitude,longitude],
-                                                                    "valores":dictionary})                             
-                           
-
+                                        print(f'station {estacion} {station_coordinates} working on line {id} from file {meteo_file_path}')
+                                        print(f'Date: {date_value},Hora: {hour}, NO2: {NO2_value}')
                                     else:
                                         continue
                                 except Exception as e:  
