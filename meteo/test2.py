@@ -46,9 +46,9 @@ coordinates = {
 
 def contains_date(line):
     # Loop through each pattern to see if the line contains a date
-    for list_i, pattern in enumerate(patterns):
+    for pattern in patterns:
         if re.search(pattern, line):
-            return True, list_i, pattern
+            return True
     return False
 
 def extractdata_meteo():
@@ -121,39 +121,11 @@ def extractdata_meteo():
                             # After identifying the columns, extract the NO2 value if the line contains a valid date
                             if pos_date is not None:
                                 try:
-                                    
                                     if contains_date(lect_line[pos_date]):
-                                        match, list_i, matched_pattern = contains_date(lect_line[pos_date])  # Get pattern index
-                                        date_value = lect_line[pos_date].replace(' ', '')
-                                        ##### for fomating
-                                        
-                                        
-                                        # Depending on the matched pattern, use the corresponding format string
-                                        if list_i == 0:  # YYYY-MM-DD
-                                            date_obj = datetime.strptime(date_value, "%Y-%m-%d").date()
-                                            if date_obj.strftime("%m") ==  "05":
-                                                date_value = date_obj.strftime("%Y-%m-%d") #check if it's May
-                                            else:
-                                                continue
-                                        elif list_i == 1:  # DD/MM/YYYY or MM/DD/YYYY
-                                            date_obj = datetime.strptime(date_value, "%d/%m/%Y").date()  # Adjust based on your format
-                                            if date_obj.strftime("%m") ==  "05":
-                                                date_value = date_obj.strftime("%d/%m/%Y")
-                                            else:
-                                                continue
-
-                                        elif list_i == 2:  # Month Day, Year (e.g., "October 24, 2024")
-                                            date_obj = datetime.strptime(date_value, "%B %d, %Y").date()                                
-                                            if date_obj.strftime("%m") ==  "05":
-                                                date_value = date_obj.strftime("%B %d, %Y")
-                                            else:
-                                                continue
-
-                                                
-
+                                        date_value = lect_line[pos_date]
                                         if pos_NO2 is not None:
                                             if  lect_line[pos_NO2]:
-                                                NO2_value = int(lect_line[pos_NO2])
+                                                NO2_value = lect_line[pos_NO2]
                                             else:
                                                 continue
                                                 
@@ -162,7 +134,7 @@ def extractdata_meteo():
                                             break
                                         if pos_hour is not None:
                                             if lect_line[pos_hour]:
-                                                hour = int(lect_line[pos_hour])
+                                                hour = lect_line[pos_hour]
                                             else:
                                                 continue 
                                         else:
@@ -182,9 +154,8 @@ def extractdata_meteo():
                                             db.meteo.insert_one({"id_estacion":id_estacion,
                                                                    "nombre":estacion,
                                                                     "coordenadas":[latitude,longitude],
-                                                                    "valores":dictionary})
-                                            id_estacion += 1                           
-                             
+                                                                    "valores":dictionary})                             
+                           
                                         
                                     
                                     

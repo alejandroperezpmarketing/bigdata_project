@@ -1,14 +1,5 @@
 [
     {
-        "label": "pandas",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "pandas",
-        "description": "pandas",
-        "detail": "pandas",
-        "documentation": {}
-    },
-    {
         "label": "os",
         "kind": 6,
         "isExtraImport": true,
@@ -33,6 +24,46 @@
         "importPath": "re",
         "description": "re",
         "detail": "re",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
         "documentation": {}
     },
     {
@@ -69,6 +100,39 @@
         "documentation": {}
     },
     {
+        "label": "MongoClient",
+        "importPath": "pymongo",
+        "description": "pymongo",
+        "isExtraImport": true,
+        "detail": "pymongo",
+        "documentation": {}
+    },
+    {
+        "label": "MongoClient",
+        "importPath": "pymongo",
+        "description": "pymongo",
+        "isExtraImport": true,
+        "detail": "pymongo",
+        "documentation": {}
+    },
+    {
+        "label": "MongoClient",
+        "importPath": "pymongo",
+        "description": "pymongo",
+        "isExtraImport": true,
+        "detail": "pymongo",
+        "documentation": {}
+    },
+    {
+        "label": "pandas",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "pandas",
+        "description": "pandas",
+        "detail": "pandas",
+        "documentation": {}
+    },
+    {
         "label": "numpy",
         "kind": 6,
         "isExtraImport": true,
@@ -78,20 +142,29 @@
         "documentation": {}
     },
     {
-        "label": "extractdata_meteo",
+        "label": "contains_date",
         "kind": 2,
         "importPath": "meteo.extract_data_meteo",
         "description": "meteo.extract_data_meteo",
-        "peekOfCode": "def extractdata_meteo():\n    path=\"/home/vagrant/Documents/bigdata/bigdata_project/meteo\"\n    #path = \"/home/vagrant/Documents/bigdata/data\"\n    meteo_folder_name = 'estaciones_metereologicas'\n    df_meteo_path = os.path.join(path, meteo_folder_name)\n    #########################\n    # Check if the traffic directory contains any files\n    if not os.listdir(df_meteo_path):\n        print(\"ERROR: No traffic data files in folder available\")\n        return  # Exit the function if no files are found",
+        "peekOfCode": "def contains_date(line):\n    # Loop through each pattern to see if the line contains a date\n    for list_i, pattern in enumerate(patterns):\n        if re.search(pattern, line):\n            return True, list_i, pattern\n    return False\ndef extractdata_meteo():\n    path = \"/home/vagrant/Documents/bigdata/bigdata_project/meteo\"\n    meteo_folder_name = 'estaciones_metereologicas'\n    df_meteo_path = os.path.join(path, meteo_folder_name)",
         "detail": "meteo.extract_data_meteo",
         "documentation": {}
     },
     {
-        "label": "coordinates",
+        "label": "extractdata_meteo",
+        "kind": 2,
+        "importPath": "meteo.extract_data_meteo",
+        "description": "meteo.extract_data_meteo",
+        "peekOfCode": "def extractdata_meteo():\n    path = \"/home/vagrant/Documents/bigdata/bigdata_project/meteo\"\n    meteo_folder_name = 'estaciones_metereologicas'\n    df_meteo_path = os.path.join(path, meteo_folder_name)\n    # Check if the directory contains files\n    if not os.listdir(df_meteo_path):\n        print(\"ERROR: No traffic data files in folder available\")\n        return  # Exit if no files found\n    else:\n        print(\"ok meteo\")",
+        "detail": "meteo.extract_data_meteo",
+        "documentation": {}
+    },
+    {
+        "label": "id_estacion",
         "kind": 5,
         "importPath": "meteo.extract_data_meteo",
         "description": "meteo.extract_data_meteo",
-        "peekOfCode": "coordinates = {\n\"Av França\": [39.457504, -0.342689],\n\"Bulevard Sud\": [39.450378, -0.396313],\n\"Molí del Sol\": [39.481138, -0.408558],\n\"Pista de Silla\": [39.458060, -0.376653],\n\"Politècnic\": [39.479621, -0.337407],\n\"Centre\": [39.470718, -0.376384],\n\"Vivers\": [39.479488, -0.369550],\n\"València Port Moll Trans Ponent\": [39.459264, -0.323217],\n\"Nazaret Met\": [39.448554, -0.333289],",
+        "peekOfCode": "id_estacion = 1\n###########\n# Define date patterns to match different date formats\npatterns = [\n    r\"^\\d{4}-\\d{2}-\\d{2}\",    # YYYY-MM-DD\n    r\"^\\d{2}/\\d{2}/\\d{4}\",    # DD/MM/YYYY or MM/DD/YYYY\n    r\"^[A-Za-z]+\\s\\d{1,2},\\s\\d{4}\"  # Month Day, Year\n]\n#########################\n###### MONGODB CONEXTION#############################",
         "detail": "meteo.extract_data_meteo",
         "documentation": {}
     },
@@ -100,7 +173,16 @@
         "kind": 5,
         "importPath": "meteo.extract_data_meteo",
         "description": "meteo.extract_data_meteo",
-        "peekOfCode": "patterns = [\n        r\"^\\d{4}-\\d{2}-\\d{2}\",    # YYYY-MM-DD\n        r\"^\\d{2}/\\d{2}/\\d{4}\",    # DD/MM/YYYY or MM/DD/YYYY\n        r\"^[A-Za-z]+\\s\\d{1,2},\\s\\d{4}\"  # Month Day, Year\n    ]\nclient = mc('mongodb://vagrant:vagrant@localhost:27017/bigdata?authSource=admin')\ndb = client.bigdata\ndef extractdata_meteo():\n    path=\"/home/vagrant/Documents/bigdata/bigdata_project/meteo\"\n    #path = \"/home/vagrant/Documents/bigdata/data\"",
+        "peekOfCode": "patterns = [\n    r\"^\\d{4}-\\d{2}-\\d{2}\",    # YYYY-MM-DD\n    r\"^\\d{2}/\\d{2}/\\d{4}\",    # DD/MM/YYYY or MM/DD/YYYY\n    r\"^[A-Za-z]+\\s\\d{1,2},\\s\\d{4}\"  # Month Day, Year\n]\n#########################\n###### MONGODB CONEXTION#############################\n# 1. Client\n#client = mc('mongodb://vagrant:vagrant@localhost:27017/bigdata')\nclient = mc('mongodb://vagrant:vagrant@localhost:27017/bigdata?authSource=admin')",
+        "detail": "meteo.extract_data_meteo",
+        "documentation": {}
+    },
+    {
+        "label": "#client",
+        "kind": 5,
+        "importPath": "meteo.extract_data_meteo",
+        "description": "meteo.extract_data_meteo",
+        "peekOfCode": "#client = mc('mongodb://vagrant:vagrant@localhost:27017/bigdata')\nclient = mc('mongodb://vagrant:vagrant@localhost:27017/bigdata?authSource=admin')\ndb = client.bigdata\ncoordinates = {\n\"Av França\": [39.457504, -0.342689],\n\"Bulevard Sud\": [39.450378, -0.396313],\n\"Molí del Sol\": [39.481138, -0.408558],\n\"Pista de Silla\": [39.458060, -0.376653],\n\"Politècnic\": [39.479621, -0.337407],\n\"Centre\": [39.470718, -0.376384],",
         "detail": "meteo.extract_data_meteo",
         "documentation": {}
     },
@@ -109,7 +191,7 @@
         "kind": 5,
         "importPath": "meteo.extract_data_meteo",
         "description": "meteo.extract_data_meteo",
-        "peekOfCode": "client = mc('mongodb://vagrant:vagrant@localhost:27017/bigdata?authSource=admin')\ndb = client.bigdata\ndef extractdata_meteo():\n    path=\"/home/vagrant/Documents/bigdata/bigdata_project/meteo\"\n    #path = \"/home/vagrant/Documents/bigdata/data\"\n    meteo_folder_name = 'estaciones_metereologicas'\n    df_meteo_path = os.path.join(path, meteo_folder_name)\n    #########################\n    # Check if the traffic directory contains any files\n    if not os.listdir(df_meteo_path):",
+        "peekOfCode": "client = mc('mongodb://vagrant:vagrant@localhost:27017/bigdata?authSource=admin')\ndb = client.bigdata\ncoordinates = {\n\"Av França\": [39.457504, -0.342689],\n\"Bulevard Sud\": [39.450378, -0.396313],\n\"Molí del Sol\": [39.481138, -0.408558],\n\"Pista de Silla\": [39.458060, -0.376653],\n\"Politècnic\": [39.479621, -0.337407],\n\"Centre\": [39.470718, -0.376384],\n\"Vivers\": [39.479488, -0.369550],",
         "detail": "meteo.extract_data_meteo",
         "documentation": {}
     },
@@ -118,8 +200,206 @@
         "kind": 5,
         "importPath": "meteo.extract_data_meteo",
         "description": "meteo.extract_data_meteo",
-        "peekOfCode": "db = client.bigdata\ndef extractdata_meteo():\n    path=\"/home/vagrant/Documents/bigdata/bigdata_project/meteo\"\n    #path = \"/home/vagrant/Documents/bigdata/data\"\n    meteo_folder_name = 'estaciones_metereologicas'\n    df_meteo_path = os.path.join(path, meteo_folder_name)\n    #########################\n    # Check if the traffic directory contains any files\n    if not os.listdir(df_meteo_path):\n        print(\"ERROR: No traffic data files in folder available\")",
+        "peekOfCode": "db = client.bigdata\ncoordinates = {\n\"Av França\": [39.457504, -0.342689],\n\"Bulevard Sud\": [39.450378, -0.396313],\n\"Molí del Sol\": [39.481138, -0.408558],\n\"Pista de Silla\": [39.458060, -0.376653],\n\"Politècnic\": [39.479621, -0.337407],\n\"Centre\": [39.470718, -0.376384],\n\"Vivers\": [39.479488, -0.369550],\n\"València Port Moll Trans Ponent\": [39.459264, -0.323217],",
         "detail": "meteo.extract_data_meteo",
+        "documentation": {}
+    },
+    {
+        "label": "coordinates",
+        "kind": 5,
+        "importPath": "meteo.extract_data_meteo",
+        "description": "meteo.extract_data_meteo",
+        "peekOfCode": "coordinates = {\n\"Av França\": [39.457504, -0.342689],\n\"Bulevard Sud\": [39.450378, -0.396313],\n\"Molí del Sol\": [39.481138, -0.408558],\n\"Pista de Silla\": [39.458060, -0.376653],\n\"Politècnic\": [39.479621, -0.337407],\n\"Centre\": [39.470718, -0.376384],\n\"Vivers\": [39.479488, -0.369550],\n\"València Port Moll Trans Ponent\": [39.459264, -0.323217],\n\"Nazaret Met-2\": [39.448554, -0.333289],",
+        "detail": "meteo.extract_data_meteo",
+        "documentation": {}
+    },
+    {
+        "label": "extractdata_meteo",
+        "kind": 2,
+        "importPath": "meteo.mteo_test",
+        "description": "meteo.mteo_test",
+        "peekOfCode": "def extractdata_meteo():\n    path=\"/home/vagrant/Documents/bigdata/bigdata_project/meteo\"\n    #path = \"/home/vagrant/Documents/bigdata/data\"\n    meteo_folder_name = 'estaciones_metereologicas'\n    df_meteo_path = os.path.join(path, meteo_folder_name)\n    id_estacion = 1\n    #########################\n    # Check if the traffic directory contains any files\n    if not os.listdir(df_meteo_path):\n        print(\"ERROR: No traffic data files in folder available\")",
+        "detail": "meteo.mteo_test",
+        "documentation": {}
+    },
+    {
+        "label": "logs_path",
+        "kind": 5,
+        "importPath": "meteo.mteo_test",
+        "description": "meteo.mteo_test",
+        "peekOfCode": "logs_path = \"/home/vagrant/Documents/bigdata/bigdata_project/meteo\"\n#logging.basicConfig(file=f'{logs_path}/meteo_data.log',level=logging.INFO)\ncoordinates = {\n\"Av França\": [39.457504, -0.342689],\n\"Bulevard Sud\": [39.450378, -0.396313],\n\"Molí del Sol\": [39.481138, -0.408558],\n\"Pista de Silla\": [39.458060, -0.376653],\n\"Politècnic\": [39.479621, -0.337407],\n\"Centre\": [39.470718, -0.376384],\n\"Vivers\": [39.479488, -0.369550],",
+        "detail": "meteo.mteo_test",
+        "documentation": {}
+    },
+    {
+        "label": "coordinates",
+        "kind": 5,
+        "importPath": "meteo.mteo_test",
+        "description": "meteo.mteo_test",
+        "peekOfCode": "coordinates = {\n\"Av França\": [39.457504, -0.342689],\n\"Bulevard Sud\": [39.450378, -0.396313],\n\"Molí del Sol\": [39.481138, -0.408558],\n\"Pista de Silla\": [39.458060, -0.376653],\n\"Politècnic\": [39.479621, -0.337407],\n\"Centre\": [39.470718, -0.376384],\n\"Vivers\": [39.479488, -0.369550],\n\"València Port Moll Trans Ponent\": [39.459264, -0.323217],\n\"Nazaret Met-2\": [39.448554, -0.333289],",
+        "detail": "meteo.mteo_test",
+        "documentation": {}
+    },
+    {
+        "label": "patterns",
+        "kind": 5,
+        "importPath": "meteo.mteo_test",
+        "description": "meteo.mteo_test",
+        "peekOfCode": "patterns = [\n        r\"^\\d{4}-\\d{2}-\\d{2}\",    # YYYY-MM-DD\n        r\"^\\d{2}/\\d{2}/\\d{4}\",    # DD/MM/YYYY or MM/DD/YYYY\n        r\"^[A-Za-z]+\\s\\d{1,2},\\s\\d{4}\"  # Month Day, Year\n    ]\nclient = mc('mongodb://vagrant:vagrant@localhost:27017/bigdata?authSource=admin')\ndb = client.bigdata\ndef extractdata_meteo():\n    path=\"/home/vagrant/Documents/bigdata/bigdata_project/meteo\"\n    #path = \"/home/vagrant/Documents/bigdata/data\"",
+        "detail": "meteo.mteo_test",
+        "documentation": {}
+    },
+    {
+        "label": "client",
+        "kind": 5,
+        "importPath": "meteo.mteo_test",
+        "description": "meteo.mteo_test",
+        "peekOfCode": "client = mc('mongodb://vagrant:vagrant@localhost:27017/bigdata?authSource=admin')\ndb = client.bigdata\ndef extractdata_meteo():\n    path=\"/home/vagrant/Documents/bigdata/bigdata_project/meteo\"\n    #path = \"/home/vagrant/Documents/bigdata/data\"\n    meteo_folder_name = 'estaciones_metereologicas'\n    df_meteo_path = os.path.join(path, meteo_folder_name)\n    id_estacion = 1\n    #########################\n    # Check if the traffic directory contains any files",
+        "detail": "meteo.mteo_test",
+        "documentation": {}
+    },
+    {
+        "label": "db",
+        "kind": 5,
+        "importPath": "meteo.mteo_test",
+        "description": "meteo.mteo_test",
+        "peekOfCode": "db = client.bigdata\ndef extractdata_meteo():\n    path=\"/home/vagrant/Documents/bigdata/bigdata_project/meteo\"\n    #path = \"/home/vagrant/Documents/bigdata/data\"\n    meteo_folder_name = 'estaciones_metereologicas'\n    df_meteo_path = os.path.join(path, meteo_folder_name)\n    id_estacion = 1\n    #########################\n    # Check if the traffic directory contains any files\n    if not os.listdir(df_meteo_path):",
+        "detail": "meteo.mteo_test",
+        "documentation": {}
+    },
+    {
+        "label": "contains_date",
+        "kind": 2,
+        "importPath": "meteo.test",
+        "description": "meteo.test",
+        "peekOfCode": "def contains_date(line):\n    # Loop through each pattern to see if the line contains a date\n    for pattern in patterns:\n        if re.search(pattern, line):\n            return True\n    return False\ndef extractdata_meteo():\n    path = \"/home/vagrant/Documents/bigdata/bigdata_project/meteo\"\n    meteo_folder_name = 'estaciones_metereologicas'\n    df_meteo_path = os.path.join(path, meteo_folder_name)",
+        "detail": "meteo.test",
+        "documentation": {}
+    },
+    {
+        "label": "extractdata_meteo",
+        "kind": 2,
+        "importPath": "meteo.test",
+        "description": "meteo.test",
+        "peekOfCode": "def extractdata_meteo():\n    path = \"/home/vagrant/Documents/bigdata/bigdata_project/meteo\"\n    meteo_folder_name = 'estaciones_metereologicas'\n    df_meteo_path = os.path.join(path, meteo_folder_name)\n    # Check if the directory contains files\n    if not os.listdir(df_meteo_path):\n        print(\"ERROR: No traffic data files in folder available\")\n        return  # Exit if no files found\n    else:\n        print(\"ok meteo\")",
+        "detail": "meteo.test",
+        "documentation": {}
+    },
+    {
+        "label": "patterns",
+        "kind": 5,
+        "importPath": "meteo.test",
+        "description": "meteo.test",
+        "peekOfCode": "patterns = [\n    r\"^\\d{4}-\\d{2}-\\d{2}\",    # YYYY-MM-DD\n    r\"^\\d{2}/\\d{2}/\\d{4}\",    # DD/MM/YYYY or MM/DD/YYYY\n    r\"^[A-Za-z]+\\s\\d{1,2},\\s\\d{4}\"  # Month Day, Year\n]\ncoordinates = {\n\"Av França\": [39.457504, -0.342689],\n\"Bulevard Sud\": [39.450378, -0.396313],\n\"Molí del Sol\": [39.481138, -0.408558],\n\"Pista de Silla\": [39.458060, -0.376653],",
+        "detail": "meteo.test",
+        "documentation": {}
+    },
+    {
+        "label": "coordinates",
+        "kind": 5,
+        "importPath": "meteo.test",
+        "description": "meteo.test",
+        "peekOfCode": "coordinates = {\n\"Av França\": [39.457504, -0.342689],\n\"Bulevard Sud\": [39.450378, -0.396313],\n\"Molí del Sol\": [39.481138, -0.408558],\n\"Pista de Silla\": [39.458060, -0.376653],\n\"Politècnic\": [39.479621, -0.337407],\n\"Centre\": [39.470718, -0.376384],\n\"Vivers\": [39.479488, -0.369550],\n\"València Port Moll Trans Ponent\": [39.459264, -0.323217],\n\"Nazaret Met-2\": [39.448554, -0.333289],",
+        "detail": "meteo.test",
+        "documentation": {}
+    },
+    {
+        "label": "contains_date",
+        "kind": 2,
+        "importPath": "meteo.test2",
+        "description": "meteo.test2",
+        "peekOfCode": "def contains_date(line):\n    # Loop through each pattern to see if the line contains a date\n    for pattern in patterns:\n        if re.search(pattern, line):\n            return True\n    return False\ndef extractdata_meteo():\n    path = \"/home/vagrant/Documents/bigdata/bigdata_project/meteo\"\n    meteo_folder_name = 'estaciones_metereologicas'\n    df_meteo_path = os.path.join(path, meteo_folder_name)",
+        "detail": "meteo.test2",
+        "documentation": {}
+    },
+    {
+        "label": "extractdata_meteo",
+        "kind": 2,
+        "importPath": "meteo.test2",
+        "description": "meteo.test2",
+        "peekOfCode": "def extractdata_meteo():\n    path = \"/home/vagrant/Documents/bigdata/bigdata_project/meteo\"\n    meteo_folder_name = 'estaciones_metereologicas'\n    df_meteo_path = os.path.join(path, meteo_folder_name)\n    # Check if the directory contains files\n    if not os.listdir(df_meteo_path):\n        print(\"ERROR: No traffic data files in folder available\")\n        return  # Exit if no files found\n    else:\n        print(\"ok meteo\")",
+        "detail": "meteo.test2",
+        "documentation": {}
+    },
+    {
+        "label": "id_estacion",
+        "kind": 5,
+        "importPath": "meteo.test2",
+        "description": "meteo.test2",
+        "peekOfCode": "id_estacion = 1\n###########\n# Define date patterns to match different date formats\npatterns = [\n    r\"^\\d{4}-\\d{2}-\\d{2}\",    # YYYY-MM-DD\n    r\"^\\d{2}/\\d{2}/\\d{4}\",    # DD/MM/YYYY or MM/DD/YYYY\n    r\"^[A-Za-z]+\\s\\d{1,2},\\s\\d{4}\"  # Month Day, Year\n]\n#########################\n###### MONGODB CONEXTION#############################",
+        "detail": "meteo.test2",
+        "documentation": {}
+    },
+    {
+        "label": "patterns",
+        "kind": 5,
+        "importPath": "meteo.test2",
+        "description": "meteo.test2",
+        "peekOfCode": "patterns = [\n    r\"^\\d{4}-\\d{2}-\\d{2}\",    # YYYY-MM-DD\n    r\"^\\d{2}/\\d{2}/\\d{4}\",    # DD/MM/YYYY or MM/DD/YYYY\n    r\"^[A-Za-z]+\\s\\d{1,2},\\s\\d{4}\"  # Month Day, Year\n]\n#########################\n###### MONGODB CONEXTION#############################\n# 1. Client\n#client = mc('mongodb://vagrant:vagrant@localhost:27017/bigdata')\nclient = mc('mongodb://vagrant:vagrant@localhost:27017/bigdata?authSource=admin')",
+        "detail": "meteo.test2",
+        "documentation": {}
+    },
+    {
+        "label": "#client",
+        "kind": 5,
+        "importPath": "meteo.test2",
+        "description": "meteo.test2",
+        "peekOfCode": "#client = mc('mongodb://vagrant:vagrant@localhost:27017/bigdata')\nclient = mc('mongodb://vagrant:vagrant@localhost:27017/bigdata?authSource=admin')\ndb = client.bigdata\ncoordinates = {\n\"Av França\": [39.457504, -0.342689],\n\"Bulevard Sud\": [39.450378, -0.396313],\n\"Molí del Sol\": [39.481138, -0.408558],\n\"Pista de Silla\": [39.458060, -0.376653],\n\"Politècnic\": [39.479621, -0.337407],\n\"Centre\": [39.470718, -0.376384],",
+        "detail": "meteo.test2",
+        "documentation": {}
+    },
+    {
+        "label": "client",
+        "kind": 5,
+        "importPath": "meteo.test2",
+        "description": "meteo.test2",
+        "peekOfCode": "client = mc('mongodb://vagrant:vagrant@localhost:27017/bigdata?authSource=admin')\ndb = client.bigdata\ncoordinates = {\n\"Av França\": [39.457504, -0.342689],\n\"Bulevard Sud\": [39.450378, -0.396313],\n\"Molí del Sol\": [39.481138, -0.408558],\n\"Pista de Silla\": [39.458060, -0.376653],\n\"Politècnic\": [39.479621, -0.337407],\n\"Centre\": [39.470718, -0.376384],\n\"Vivers\": [39.479488, -0.369550],",
+        "detail": "meteo.test2",
+        "documentation": {}
+    },
+    {
+        "label": "db",
+        "kind": 5,
+        "importPath": "meteo.test2",
+        "description": "meteo.test2",
+        "peekOfCode": "db = client.bigdata\ncoordinates = {\n\"Av França\": [39.457504, -0.342689],\n\"Bulevard Sud\": [39.450378, -0.396313],\n\"Molí del Sol\": [39.481138, -0.408558],\n\"Pista de Silla\": [39.458060, -0.376653],\n\"Politècnic\": [39.479621, -0.337407],\n\"Centre\": [39.470718, -0.376384],\n\"Vivers\": [39.479488, -0.369550],\n\"València Port Moll Trans Ponent\": [39.459264, -0.323217],",
+        "detail": "meteo.test2",
+        "documentation": {}
+    },
+    {
+        "label": "coordinates",
+        "kind": 5,
+        "importPath": "meteo.test2",
+        "description": "meteo.test2",
+        "peekOfCode": "coordinates = {\n\"Av França\": [39.457504, -0.342689],\n\"Bulevard Sud\": [39.450378, -0.396313],\n\"Molí del Sol\": [39.481138, -0.408558],\n\"Pista de Silla\": [39.458060, -0.376653],\n\"Politècnic\": [39.479621, -0.337407],\n\"Centre\": [39.470718, -0.376384],\n\"Vivers\": [39.479488, -0.369550],\n\"València Port Moll Trans Ponent\": [39.459264, -0.323217],\n\"Nazaret Met-2\": [39.448554, -0.333289],",
+        "detail": "meteo.test2",
+        "documentation": {}
+    },
+    {
+        "label": "date_str",
+        "kind": 5,
+        "importPath": "meteo.test3",
+        "description": "meteo.test3",
+        "peekOfCode": "date_str = \"2024-10-24\"\n# Convert the string to a datetime object\ndate_obj = datetime.strptime(date_str, \"%Y-%m-%d\")\n# Format the date to DD-MM-YYYY\nformatted_date = date_obj.strftime(\"%d-%m-%Y\")\nprint(formatted_date)",
+        "detail": "meteo.test3",
+        "documentation": {}
+    },
+    {
+        "label": "date_obj",
+        "kind": 5,
+        "importPath": "meteo.test3",
+        "description": "meteo.test3",
+        "peekOfCode": "date_obj = datetime.strptime(date_str, \"%Y-%m-%d\")\n# Format the date to DD-MM-YYYY\nformatted_date = date_obj.strftime(\"%d-%m-%Y\")\nprint(formatted_date)",
+        "detail": "meteo.test3",
+        "documentation": {}
+    },
+    {
+        "label": "formatted_date",
+        "kind": 5,
+        "importPath": "meteo.test3",
+        "description": "meteo.test3",
+        "peekOfCode": "formatted_date = date_obj.strftime(\"%d-%m-%Y\")\nprint(formatted_date)",
+        "detail": "meteo.test3",
         "documentation": {}
     },
     {
