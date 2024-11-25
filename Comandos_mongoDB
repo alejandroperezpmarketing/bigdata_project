@@ -1,0 +1,236 @@
+COMANDOS BIG DATA
+
+------------------- INICIAR SERVIDOR DE MONGO -----------------------------------------------------------------------------------
+
+sudo systemctl start mongod
+
+
+------------------ INICIAR LA SHELL DE MONGO ------------------------------------------------------------------------------------
+
+mongosh
+
+-------- MOSTRAR LAS BASES DE DATOS DISPONIBLES --------------------------------------------------------------------------------
+
+(dentro de la shell)
+show dbs
+
+--------------- IMPORTAR BASES DE DATOS A MONGO -------------------------------------------------------------------------------
+(desde dentro de /bin) -> porque ahí tenemos instalado mongoimport
+
+./mongoimport --db test --collection ciudades --file "/home/manuel/Documentos/BIG_DATA/PRACTICAS/PRACTICA_1/ciudades.json"
+
+------------------------ VER TODOS LOS ARCHIVOS DE UNA CARPETA ----------------------------------------------------------------
+
+ls
+ls -l
+
+------------------ PARA CONECTAR CON UNA BASE DE DATOS ------------------------------------------------------------------------
+
+use test (test es la bdd)
+
+---------------- PARA VER LAS COLECCIONES DENTRO DE LA BDD --------------------------------------------------------------------
+
+show collections
+
+------------- PARA VER EL TOTAL DE DOCUMENTOS DENTRO --------------------------------------------------------------------------
+
+db.ciudades.count()
+
+
+--------- PARA INSERTAR INFORMACIÓN NUEVA A UN DOCUMENTO -----------------------------------------------------------------------
+
+db.ciudades.insertOne({"nombre":"Palma"})
+
+
+-------- EFECTUAR CONSULTAS ----------------------------------------------------------------------------------------------------
+
+db.ciudades.findOne()
+db.ciudades.find() -> este limita la búsqueda a los primeros 20 elementos
+
+db.ciudades.find({nombre:"Valencia"},{alcalde:0}) ----> devuelve todo menos el campo "alcalde"
+db.ciudades.find({nombre:"Valencia"},{alcalde:1}) ----> devuelve solo el campo "alcalde"
+db.ciudades.find({nombre:"Valencia"},{_id:0,alcalde:1}) ----> devuelve el campo alcalde sin el "id"
+
+db.ciudades.find({},{_id:0,nombre:1}).sort({nombre:1}).limit(5) ------> devuelve solo los nombres ordenados alfabéticamente, limitado a los 5 primeros ( los {} vacíos, son para que recorra todos los documentos de la colección)
+
+db.ciudades.find({"alcalde.partido":"PP"},{_id:0,nombre:1}) -------> devuelve los partidos políticos que sean "PP", y muestra en pantalla solo los nombres de las ciudades
+db.ciudades.find({"alcalde.partido":"PP",famoso_por:"playas"},{_id:0,nombre:1}) ----------------> devuelve las ciudades con el partido politico "PP" y el atributo "playas" dentro de "famosos_por". La salida es el nombre de la ciudad
+
+db.ciudades.find({poblacion:{$lt:1000000,$gt:500000}},{_id:0,nombre:1,poblacion:1}) -----------------> devuelve las ciudades con población entre 1,000,000 y 500,000. Devuelve el nombre de la ciudad y su población 
+
+(gt = mayor a) (lt = menor a)
+
+db.ciudades.find({$and:[{poblacion:{$gt:500000}},{"alcalde.partido":"PSOE"}]},{_id:0,nombre:1}) ------> devuelve la población mayor a 500,000 y de esas, las ciudades que tengan el partido político e "PSOE"
+db.ciudades.find({$or:[{poblacion:{$gt:500000}},{"alcalde.partido":"PSOE"}]},{_id:0,nombre:1,poblacion:1}) -----> solo cambia el atributo "and" por el de "or" para obtener las ciudades mayures a 500,000 o que tengan el partido político de "PSOE". Al final se añade a la salida el campo de nombre y el de la población.
+
+db.ciudades.find({"alcalde.partido":{$in:["PSOE","PP"]}},{_id:0,nombre:1}) -------> devuelve los nombres de las ciudades que tengan el partido político de PSOE o el de PP
+db.ciudades.find({"alcalde.partido":{$nin:["PSOE","PP"]}},{_id:0,nombre:1,"alcalde.partido":1}) ------> devuelve lo opuesto al anterior, cambiando "$in" por el de "$nin" y al final añade un campo a la salida
+
+db.ciudades.find({"alcalde.partido":{$nin:[/PSOE/,"PP"]}},{_id:0,nombre:1,"alcalde.partido":1}) ------> devuelve ciudades cuyo partido sea PP o incluya las siglas PSOE dentro de su nombre. Por eso ponen /PSOE/ 
+db.ciudades.find({poblacion:{$not:{$gt:500000}}},{_id:0,nombre:1}) -------------> para ciudades con menos de 500,000. Devuelve el nombre
+db.ciudades.find({famoso_por:{$all:["playas","gastronomia"]}},{_id:0,nombre:1}) ---------> devuelve aquellas ciudades famosas por sus playas y gastronomía. Usa el prefijo "$all" para devolver todas las que se encuentre.
+db.ciudades.find({coordenadas:{$within:{$center:[centro,radio]}}},{_id:0,nnombre:1}) ----------> usando los prefijos: "within" y "center" permite efecuar búsquedas a partir de áreas de influencia
+db.ciudades.find({coordenadas:{$near:[40.0,-3.0]}},{_id:0,nombre:1}) ---------> usando el prefijo "$near" es posible identificar las ciudades que estén más cerca de un punto establecido (coordenadas dadas)
+
+db.ciudades.aggregate([{$geoNear:{near:{coordinates:[40,-3]},distanceField:"DistanciaCalculada",maxDistance:200000}}]) -------> Identifica aquellas ciudades que estén a menos de 200 km del punto (40,-3) con el operador "geoNear"
+
+
+
+
+------------------ DECLARAR NUEVAS VARIABLES -----------------------------------------------------------------------------------------
+
+newdata=ISODate("2017-06-01T00:00:00Z") -----> se declara la variable "newdata" de tipo fecha
+
+
+
+-------------------- ACTUALIZAR INFORMACIÓN -----------------------------------------------------------------------------------------
+
+db.ciudades.update({nombre:"Valencia"},{$set:{"alcalde.partido":"PSPV"}}) ---------> utiliza "update" y "$set"
+db.ciudades.update({nombre:"Valencia"},{$push:{famoso_por:"UPV"}})  ----------> utiliza "push" para añadir un campo valor al campo "famoso_por", en este caso "UPV"
+db.ciudades.update({nombre:"Valencia"},{$push:{famoso_por:{$each:["UV","IVU"]}}}) ---------> con este se añade más de uno, usando el prefijo "$each"
+db.ciudades.updateMany({},{$inc:{poblacion:1}}) ---------------------> con el "{}" actualizas todos los campos, en este caso se especifica el campo población para aumentarle 1 a cada uno de ellos.
+
+
+------------------ METODO UPSERT --------------------------------------------------------------------------------------------------
+
+Cuando no se encuentra un documento en la búsqueda, se crea uno nuevo combinando el criterio de búsqueda y el de actualización:
+
+db.ciudades.updateOne({nombre:"TENERIFE"},{$set:{nombre:"Tenerife"}},{upseupsert:true})   -------> cuando corren los resultados aparece marcado el upsertedCount : 1
+db.ciudades.find({},{_id:0,poblacion:1}) --------------> {} = indica que no hay criterios de búsqueda, por lo que devolverá todos los documentos de la colección de ciudades
+
+
+-------------------- BORRADO ------------------------------------------------------------------------------------------------------
+
+db.ciudades.deleteOne({nombre:"Tenefife"}) ----------> borrar un elemento
+db.ciudades.drop() -------------> para eliminar toda la colección
+db.dropDatabase() --------------> para eliminar toda la base de datos
+
+
+---------------- OBTENCIÓN DE ÍNDICES --------------------------------------------------------------------------------------------
+
+db.ciudades.getIndexes()
+db.ciudades.createIndex({nombre:1}) ----------> creación de índices
+db.ciudades.dropIndex({nombre:1}) ----------> eliminación de índices
+db.ciudades.createIndex({"alcalde.nombre":1}) -----> indice embebido
+
+db.ciudades.find({coordenadas:{$near:[40.0,-3.0]}},{_id:0,nombre:1}) ----> devuelve las ciudades más cercanas a unas coordenadas (un punto en específico) (previamente indexamos las coordenadas para que fuera más eficiente la búsqueda)
+db.ciudades.createIndex({"coordenadas":"2dsphere"}) --------> indice del tipo 2dsphere
+
+
+
+------------------------------ OPERACIONES DE AGREGACIÓN --------------------------------------------------------------------------
+
+db.ciudades.aggregate([{$group:{_id:"$famoso_por",elementos:{$sum:1}}}]) -----> utiliza pipelines de agregación para agregar documentos y contar cuantos documentos pertenecen a cada grupo
+db.ciudades.aggregate([{$group:{_id:null,poblacion_media:{$avg:"$poblacion"}}}]) --------> valor medio de la población considerando el número de ciudades de nuestra colección
+
+db.ciudades.aggregate([{$unwind:"$famoso_por"},{$group:{_id:"$famoso_por",ciudades:{$push:"$nombre"}}}])  ----------------> consulta compleja que usa "$unwind" la cual descompone los elementos en un documento separado. Después "group" agrupa los documentos según el valor del campo "famoso_por". "Push" arroja el valor del campo "nombre" de cada ciudad
+
+db.ciudades.aggregate([{$match:{"poblacion":{$gt:500000}}},{$unwind:"$famoso_por"},{$group:{_id:"$famoso_por",ciudades:{$push:"$nombre"}}}]) ------> es igual al anterior, añadiendole "match" para aplicar la búsqueda a la población que tenga más de 500,000 habitantes.
+
+db.ciudades.aggregate([{$match:{"poblacion":{$gt:500000}}},{$unwind:"$famoso_por"},{$group:{_id:"$famoso_por",ciudades:{$push:"$nombre"}}},{$out:"caracteristicas"}]) -----> esto almacena en otra colección una búsqueda. Utiliza la función "out"
+
+db.ciudades.aggregate([{$lookup:{from:"ciudades2",localField:"nombre",foreignField:"_id",as:"transportes"}},{$project:{"transportes._id":0}},{$sample:{size:3}}]) ----------> aqui se utiliza la función project para eliminar la duplicidad de los ids, que para ambas colecciones equivalía al nombre de la ciudad, así solo aparece una vez en consola al mostrar los resultados de la búsqueda.
+
+
+
+---------------------------------------------------------- INSERTAR UNA NUEVA COLECCIÓN --------------------------------------------
+
+db.createCollection("ciudades2")
+db.ciudades2.insertOne({_id:"nombre",aeropuerto:"nombreAeropuerto"}) ----------------> insertar identificador (id) y un campo (aeropuerto)
+db.ciudades.aggregate([{$lookup:{from:"ciudades2",localField:"nombre",foreignField:"_id",as:"transportes"}},{$sample:{size:3}}]) -------> esto agrega la colección de ciudades2 a la de ciudades, y se le da el nombre de "transportes"
+
+-------------------------------------------------------------- EXPORTACIÓN ---------------------------------------------------------
+
+./mongoexport --db test --collection ciudades --query '{"poblacion":{"$gt":1000000}}' --out /home/manuel/Documentos/BIG_DATA/PRACTICAS/PRACTICA_1/ciudades_prueba.json ----------> exportar una consulta en formato .json
+
+./mongoexport --db test --collection ciudades --query '{"poblacion":{"$gt":1000000}}' --type=csv --fields=nombre,poblacion,famoso_por,coordenadas,ultimo_censo,alcalde --out=/home/manuel/Documentos/BIG_DATA/PRACTICAS/PRACTICA_1/ciudades_prueba.csv ------------> con esto se exporta un archivo .csv
+
+
+------------------------------------------------- COPIA DE SEGURIDAD ----------------------------------------------------------------
+
+./mongodump --db test --collection ciudades --out /home/manuel/Documentos/BIG_DATA/PRACTICAS/PRACTICA_1 ---------------> Esto genera 2 archivos, uno comprimido .bson y otro fichero con los metadatos.
+
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ MAP REDUCE ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+head -n 10000 purchases.txt | python3 map_reduce.py --------------> Procesar las primeras 10,000 lineas de ese .txt según las indicaciones que estén en el código de python
+head -n 10000 purchases.txt | python3 map_reduce.py | sort ------> las ordenará
+
+ head -n 10000 purchases.txt | python3 map_reduce.py | sort | python3 reducer_class.py --------> Hace interactuar las funciones de mapeo con las de reducción
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,51 @@
+"""
+
+    
+    
+    if estado == 0 or estado > 5000:
+        variable = "None"
+    else:
+        return
+    
+    
+
+dic = {
+    "Identificador_tramo":"",
+    "Dirección":"",
+    "Coordenada":["Latitud", "Longitud"],
+    "Valor" : [{"Fecha":"", "Lectura:""}]
+                
+    }}
+ 
+
+
+id.Tram pos 1 
+direccion  2
+estado 3
+fecha en el nombre del fichero
+geo_point
+lectura """
+
+
+
+
+
+
+# Búsqueda
+result = db.meteo.find_one(
+    {
+        "direccion": {"$regex": "Francia", "$options": "i"},
+        "valores.fecha": {"$regex": "^2024-05-15T12:00:00Z"},  # Asegúrate del formato correcto de fecha y hora
+    },
+    {
+        "id_estacion": 1,        # Identificador de la estación
+        "coordenadas": 1,        # Coordenadas
+        "valores.fecha": 1,      # Fecha y hora
+        "valores.NO2": 1         # Valor de NO2
+    }
+)
+
+
+
+
+print(result)

@@ -1,0 +1,20 @@
+
+                            ### START LINES FOR MONGODB
+                            dictionary = [{'fecha':date_obj,'hora':hour,'lectura_NO2':NO2}]
+                            mongo_result = db.meteo.update_one({"estacion_id":id_estacion},{"$push":{"valores":{"fecha":date_obj,"hora":hour, "lectura_NO2":NO2}}})
+                           
+                            if mongo_result.raw_result["nModified"] == 0 and mongo_result.modified_count == 0 and mongo_result.upserted_id == None:
+                                db.meteo.insert_one({"id_estacion":id_estacion,
+                                                       "Nombre":estacion,
+                                                        "coordenadas":[latitude,longitude],
+                                                        "valores":dictionary})
+                                id_estacion +=1
+                            
+                             
+                                print(f"A new document has been created with id_estacion station: {id_estacion}/{estacion}")
+                            
+                            else:
+                                print(f"New entry for the document for a meteo station with id_estacion and name: {id_estacion}/{estacion}")
+
+                                
+                                
