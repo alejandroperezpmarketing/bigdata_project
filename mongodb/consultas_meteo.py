@@ -51,8 +51,6 @@ for doc in documents:
 15 de mayo a las 12:00:00, en la salida deben figurar únicamente 
 el identificador de la estación, las coordenadas y los valores de fecha y NO2.  """
 
-
-
 ##########################################
 #en terminal
 db.meteo.find({
