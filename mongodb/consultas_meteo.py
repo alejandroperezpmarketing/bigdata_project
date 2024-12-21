@@ -2,9 +2,13 @@ import pymongo as pmo
 from pymongo import MongoClient as mc
 from bson.json_util import dumps
 import json
+%matplotlib inline
+import matplotlib.pyplot as plt 
+
+
+
 client = mc('mongodb://vagrant:vagrant@localhost:27017/bigdata?authSource=admin')
 db = client.bigdata
-
 
 
 #########################################
@@ -118,22 +122,24 @@ de la estación, las coordenadas y los valores de fecha y NO2.
 # para el primer día del mes el resultado es 16.125. 
 db.meteo.aggregate([
   { 
-    $match: { nombre: { $regex: "Centre", $options: "i" } } 
-  },
-  { 
     $unwind: "$valores" 
   },
+  { 
+    $match: { nombre: { $regex: "Centre", $options: "i" },
+             $expr: { $eq: [{$month: "$valores.fecha" }, 5]
+             }}}
+  ,
   { 
     $group: {
       _id: { 
         dia: { $dayOfMonth: "$valores.fecha" }, 
-        nombre: "$nombre" 
+        nombre: "$nombre"
       },
       meanNO2: { $avg: "$valores.NO2" }
     }
   },
   { 
-    $sort: { "_id.dia": 1 } 
+    $sort: { "_id.dia": -1 } 
   },
   { 
     $project: {
@@ -145,10 +151,45 @@ db.meteo.aggregate([
   },
   {
     $out: "meanNO2centrebyday"
-  }
-  
-]).forEach(doc => printjson(doc));
+    }
+  ]).forEach(doc => printjson(doc));
 
+#export in .csv
+docker exec -it mongodb_bigdata_01 mongoexport --db=bigdata --collection=meanNO2centrebyday --type=csv --fields=nombre,dia,meanNO2 --out=/tmp/meanNO2centrebyday.csv --username vagrant --password vagrant --authenticationDatabase admin
+sudo docker cp mongodb_bigdata_01:/tmp/ ./mongodb/data/consults
+
+docker exec -it mongodb_bigdata_01 mongoexport --db=bigdata --collection=meanNO2centrebyday --type=csv --fields=nombre,dia,meanNO2 --out=/tmp/meanNO2centrebyday.csv --username vagrant --password vagrant --authenticationDatabase admin
+
+
+import matplotlib.pyplot as plt
+
+# Inicializar listas para las categorías y los valores
+categories = []
+values = []
+
+# Leer el archivo CSV utilizando open()
+with open('./mongodb/data/consults/tmp/meanNO2centrebyday.csv', 'r', newline='') as file:
+    # Omitir el encabezado
+    next(file)
+    for line in file:
+        nombre, dia, meanNO2 = line.strip().split(',')
+        categories.append(dia)
+        values.append(int(meanNO2))
+
+# Crear el gráfico de barras
+plt.bar(categories, values, color='blue')
+
+# Etiquetas y título
+plt.xlabel('Category')
+plt.ylabel('Value')
+plt.title('Bar Chart from CSV')
+
+# Mostrar el gráfico
+plt.show()
+
+
+
+#https://www.mongodb.com/docs/database-tools/mongoexport/mongoexport-examples/#std-label-mongoexport-fields-example
 #https://stackoverflow.com/questions/54754674/create-a-new-collection-from-other-collection-in-mongodb
 ######################################################
 #2.9)
