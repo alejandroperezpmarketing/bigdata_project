@@ -1,0 +1,127 @@
+[
+    {
+        "label": "MongoClient",
+        "importPath": "pymongo",
+        "description": "pymongo",
+        "isExtraImport": true,
+        "detail": "pymongo",
+        "documentation": {}
+    },
+    {
+        "label": "MongoClient",
+        "importPath": "pymongo",
+        "description": "pymongo",
+        "isExtraImport": true,
+        "detail": "pymongo",
+        "documentation": {}
+    },
+    {
+        "label": "MongoClient",
+        "importPath": "pymongo",
+        "description": "pymongo",
+        "isExtraImport": true,
+        "detail": "pymongo",
+        "documentation": {}
+    },
+    {
+        "label": "MRJob",
+        "importPath": "mrjob.job",
+        "description": "mrjob.job",
+        "isExtraImport": true,
+        "detail": "mrjob.job",
+        "documentation": {}
+    },
+    {
+        "label": "MRJob",
+        "importPath": "mrjob.job",
+        "description": "mrjob.job",
+        "isExtraImport": true,
+        "detail": "mrjob.job",
+        "documentation": {}
+    },
+    {
+        "label": "MRJob",
+        "importPath": "mrjob.job",
+        "description": "mrjob.job",
+        "isExtraImport": true,
+        "detail": "mrjob.job",
+        "documentation": {}
+    },
+    {
+        "label": "json_util",
+        "importPath": "bson",
+        "description": "bson",
+        "isExtraImport": true,
+        "detail": "bson",
+        "documentation": {}
+    },
+    {
+        "label": "json_util",
+        "importPath": "bson",
+        "description": "bson",
+        "isExtraImport": true,
+        "detail": "bson",
+        "documentation": {}
+    },
+    {
+        "label": "json_util",
+        "importPath": "bson",
+        "description": "bson",
+        "isExtraImport": true,
+        "detail": "bson",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "sys",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "sys",
+        "description": "sys",
+        "detail": "sys",
+        "documentation": {}
+    },
+    {
+        "label": "Mongoextract",
+        "kind": 6,
+        "importPath": "1.1_mapper_and_reducer.mapper",
+        "description": "1.1_mapper_and_reducer.mapper",
+        "peekOfCode": "class Mongoextract(MRjob):\n    def mappper(self):\n        # MongoDB Connection\n        client = mc('mongodb://vagrant:vagrant@localhost:27017/bigdata?authSource=admin')\n        db = client.bigdata\n        trafico = db.meteo.find(\n            {\"valor\":\"$valores.lectura\", \"fecha\":\"$valores.fecha\"},\n            {\"coordenadas\": 0, \"nombre\": 1, \"fecha\":1, \"valores\":1}  \n        )\n        # Mostrar los resultados",
+        "detail": "1.1_mapper_and_reducer.mapper",
+        "documentation": {}
+    },
+    {
+        "label": "Mongoextract",
+        "kind": 6,
+        "importPath": "1.1_mapper_and_reducer.test",
+        "description": "1.1_mapper_and_reducer.test",
+        "peekOfCode": "class Mongoextract(MRJob):\n    def mapper(self, key, line):\n        # MongoDB Connection\n        client = mc('mongodb://vagrant:vagrant@localhost:27017/bigdata?authSource=admin')\n        db = client.bigdata\n        # Consultar la colección 'trafico'\n        trafico = db.trafico.find(\n            {},\n            {\"coordenadas\": 0, \"nombre\": 1, \"fecha\": 1, \"valores\": 1}\n        )",
+        "detail": "1.1_mapper_and_reducer.test",
+        "documentation": {}
+    },
+    {
+        "label": "Mongoextract",
+        "kind": 6,
+        "importPath": "1.2.mrjob",
+        "description": "1.2.mrjob",
+        "peekOfCode": "class Mongoextract(MRjob):\n    def mappper(self):\n        # MongoDB Connection\n        client = mc('mongodb://vagrant:vagrant@localhost:27017/bigdata?authSource=admin')\n        db = client.bigdata\n        trafico = db.meteo.find(\n            {\"valor\":\"$valores.lectura\", \"fecha\":\"$valores.fecha\"},\n            {\"coordenadas\": 0, \"nombre\": 1, \"fecha\":1, \"valores\":1}  \n        )\n        # Mostrar los resultados",
+        "detail": "1.2.mrjob",
+        "documentation": {}
+    }
+]
