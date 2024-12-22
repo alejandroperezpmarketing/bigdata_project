@@ -1,7 +1,7 @@
 from pymongo import MongoClient as mc
 from datetime import datetime
 
-def mapper():
+def extract():
     # Conexión a MongoDB
     client = mc('mongodb://vagrant:vagrant@localhost:27017/bigdata?authSource=admin')
     db = client.bigdata
